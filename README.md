@@ -20,14 +20,17 @@ to delete (only submitted by this user) or extract (out of all submitted spots)t
 
 ### Use Case
 
-![](modelling/images/UseCaseDSF.jpg)
+![](modelling/images/UseCaseDSF.png)
 
 - UC-1 [Login on Drone Spot Finder]: Users or Admins can log-in by entering an email address and password. As an extension, new user may register first.
-- UC-2 [Register on WE-CRM]: Agents can register to get an account (profile) to access the WE-CRM system.
-- UC-3 [Edit a customer]: Agents can create, update and delete customers.
-- UC-4 [Show a customer list]: Agents can get an overview over their customers based on a customer list. As an extension they can create, update and delete customers (UC-3), generate a PDF (UC-5) or send an email (UC-6).
-- UC-5 [Generate a PDF customer list]: Agents can generate a PDF containing a list of their customers.
-- UC-6 [Send customer list via email]: Agents can send an email containing a list of their customers to their own inbox.
+- UC-2 [Register on WE-CRM]: User can register to get an account (profile) to access the Drone Spot Finder system.
+- UC-3 [Create Post]:  Users are able create spots post, by submitting the location and additional comments.
+- UC-4 [Show a post list]: Users can view a list of all spots submitted.
+- UC-5 [Edit a Post]: Each user is able to edit it's own posts.
+- UC-6 [Delete a Post]: Each user is able to delete it's own posts.
+- UC-7 [Generate a PDF of Spot Post]: Each user to pull the spot information. All information of the post is converted into a PDF File, which can be downloaded.
+- UC-8 [Delete User]: Admins are able to delete users.
+- UC-9 [Show User List]: Admins can view a list of all registered Users.
 
 ## Design
 
@@ -39,15 +42,8 @@ to delete (only submitted by this user) or extract (out of all submitted spots)t
 
 ![](modelling/images/WE-CRM-Layering-Structure.png)
 
-## Implementation
 
-### Stage 1: Building a Static Website with Bootstrap
-
-In stage 01 a bootstrap based prototype has been created by using a prototyping application. 
-
-
-#####  Postgresql Database Generation
-![](images/VP-database-generation.png)
+## Tools
 
 #### Git
 The project contains a .gitignore file to keep certain 
