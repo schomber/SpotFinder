@@ -54,7 +54,7 @@ The project contains a .gitignore file to keep certain
 
 ## Maintainer
 
-- [Andreas Martin](https://github.com/andreasmartin)
+- [Martin Peraic & Philipp Labhart]
 
 ## License
 
