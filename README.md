@@ -38,10 +38,10 @@ to delete (only submitted by this user) or extract (out of all submitted spots)t
 
 #### User Management
 
-![](modelling/images/login.jpg =160px)
-![](modelling/images/register.jpg =160px)
-![](modelling/images/editUser.jpg =160px)
-![](modelling/images/list_User.jpg =160px)
+![](modelling/images/login.jpg =160x)
+![](modelling/images/register.jpg =160x)
+![](modelling/images/editUser.jpg =160x)
+![](modelling/images/list_User.jpg =160x)
 
 ### Information Systems (Layering) Architecture
 
