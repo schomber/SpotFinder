@@ -19,15 +19,7 @@
 <body>
 <div>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-        <div class="container"><a class="navbar-brand" href="index.php"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                    class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="login.php">Login</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="register.php">Sign in</a></li>
-                </ul>
-            </div>
-        </div>
+        <div class="container"><a class="navbar-brand" href="index.php"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
     </nav>
 </div>
 <div class="login-clean">
@@ -39,7 +31,7 @@
         <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
     </form>
 </div>
-<div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="#">Register</a></div>
+<div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="register">Register</a></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -6,19 +6,52 @@
  * Time: 22:11
  */
 
-require_once("layout.php");
+require_once("view/layout.php");
+require_once("config/Autoloader.php");
+
+use router\Router;
 
 session_start();
 
-if (isset($_POST['email'])) {
+$authFunction = function () {
+    if (isset($_SESSION["agentLogin"])) {
+        return true;
+    }
+    Router::redirect("/login");
+    return false;
+};
+
+$errorFunction = function () {
+    Router::errorHeader();
+    require_once("view/404.php");
+};
+
+Router::route("GET", "/login", function () {
+    require_once("view/login.php");
+});
+
+Router::route("GET", "/register", function () {
+    require_once("view/register.php");
+});
+
+Router::route("POST", "/register", function () {
+    Router::redirect("/logout");
+});
+
+Router::route("POST", "/login", function () {
     session_regenerate_id(true);
-    $_SESSION['userLogin'] = $_POST['email'];
-}
+    $_SESSION['agentLogin']=$_POST['email'];
+    Router::redirect("/");
+});
 
-if (!isset($_SESSION["userLogin"])) {
-    header("Location: login.php");
-}
+Router::route("GET", "/logout", function () {
+    session_destroy();
+    Router::redirect("/login");
+});
 
-layoutSetContent("spotList.php");
+Router::route_auth("GET", "/", $authFunction, function () {
+    layoutSetContent("spotList.php");
+});
 
-// logout: session_destroy();
+
+Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'], $errorFunction);

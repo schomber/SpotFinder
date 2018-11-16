@@ -6,20 +6,6 @@
  * Time: 22:12
  */
 ?>
-<div>
-    <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-        <div class="container"><a class="navbar-brand" href="../index.html"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="register.html"><i class="fa fa-plus"></i>&nbsp;Spot</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="register.html">Find Spot</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="editUser.html">Edit Profile</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
 <div class="container list-header" style="margin-top: 0;"><h1 class="text-center">SpotFinder</h1>
     <div class="row">
         <div class="col">
