@@ -10,11 +10,12 @@ require_once("view/layout.php");
 require_once("config/Autoloader.php");
 
 use router\Router;
+use database\Database;
 
 session_start();
 
 $authFunction = function () {
-    if (isset($_SESSION["agentLogin"])) {
+    if (isset($_SESSION["userLogin"])) {
         return true;
     }
     Router::redirect("/login");
@@ -35,8 +36,29 @@ Router::route("GET", "/register", function () {
 });
 
 Router::route("POST", "/register", function () {
+    $username = $_POST["username"];
+    $firstname = $_POST["firstname"];
+    $surname = $_POST["surname"];
+    $email = $_POST["email"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+      INSERT INTO customer (uUsername, uFName, uSName, sEmail, sPassword)
+        SELECT :uUsername, :uFName, :uSName, :sEmail, :sPassword
+        WHERE NOT EXISTS (
+          SELECT sEmail FROM customer WHERE sEmail = :emailExist
+        );
+    ');
+    $stmt->bindValue(':uUsername', $username);
+    $stmt->bindValue(':uFName', $firstname);
+    $stmt->bindValue(':uSName', $surname);
+    $stmt->bindValue(':sEmail', $email);
+    $stmt->bindValue(':emailExist', $email);
+    $stmt->bindValue(':sPassword', password_hash($_POST["password"], PASSWORD_DEFAULT));
+    $stmt->execute();
+
     Router::redirect("/logout");
 });
+
 
 Router::route("POST", "/login", function () {
     session_regenerate_id(true);
@@ -50,7 +72,7 @@ Router::route("GET", "/logout", function () {
 });
 
 Router::route_auth("GET", "/", $authFunction, function () {
-    layoutSetContent("spotList.php");
+    layoutSetContent("register.php");
 });
 
 
