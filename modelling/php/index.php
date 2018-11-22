@@ -61,8 +61,29 @@ Router::route("POST", "/register", function () {
 
 
 Router::route("POST", "/login", function () {
-    session_regenerate_id(true);
-    $_SESSION['agentLogin']=$_POST['email'];
+    $email = $_POST["email"];
+    $pdoInstance = Database::connect();
+    $stml = $pdoInstance->prepare('
+        SELECT * FROM customer WHERE semail = :email;');
+    $stml->bindValue(':email', $email);
+    $stml->execute();
+    if($stml->rowCount()>0) {
+        $customer = $stml->fetchAll(PDO::FETCH_ASSOC)[0];
+        if(password_verify($_POST["password"], $customer["spassword"])) {
+            session_regenerate_id(true);
+            $_SESSION["userLogin"]["username"] = $customer["uusername"];
+            $_SESSION["userLogin"]["email"] = $email;
+            $_SESSION["userLogin"]["id"] = $customer["uid"];
+            if(password_needs_rehash($customer["spassword"], PASSWORD_DEFAULT)){
+                $stml = $pdoInstance->prepare('
+                UPDATE customer SET spassword=:password WHERE uid =:id;');
+                $stml->bindValue(':id', $customer["uid"]);
+                $stml->bindValue(':password', password_hash(($_POST["password"]),PASSWORD_DEFAULT));
+                $stml->execute();
+
+            }
+        }
+    }
     Router::redirect("/");
 });
 
@@ -72,7 +93,7 @@ Router::route("GET", "/logout", function () {
 });
 
 Router::route_auth("GET", "/", $authFunction, function () {
-    layoutSetContent("register.php");
+    layoutSetContent("userList.php");
 });
 
 
