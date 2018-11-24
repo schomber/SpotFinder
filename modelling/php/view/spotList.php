@@ -5,6 +5,8 @@
  * Date: 14.11.2018
  * Time: 22:12
  */
+
+use config\Config;
 ?>
 <div class="container list-header" style="margin-top: 0;"><h1 class="text-center">SpotFinder</h1>
     <div class="row">
@@ -17,12 +19,12 @@
             <div class="row">
                 <div class="col-sm-12 col-md-4" style="padding: 0;padding-right: 15px;padding-left: 15px;padding-top: 0;"><iframe allowfullscreen="" frameborder="0" width="100%" height="400" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCuXnCcm1Sq61688xAtHoCGRA5GcNYVxTA&amp;q=Paris%2C+France&amp;zoom=11" style="max-height: 200px;"></iframe></div>
                 <div
-                    class="col-sm-12 col-md-4" style="width: 100%;">
+                        class="col-sm-12 col-md-4" style="width: 100%;">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Spot Information</th>
+                                <th>Spot Information <?php echo $_SESSION["userLogin"]["id"]?></th>
                             </tr>
                             </thead>
                             <tbody>

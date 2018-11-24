@@ -1,3 +1,13 @@
 .navbar.navbar-light.navbar-expand-md.navigation-clean {
 }
 
+@keyframes fadein{
+    from{opacity:0;}
+    to{opacity:1;}
+
+}
+.fadeElement{
+    animation: fadein ease-in 1s;
+
+}
+

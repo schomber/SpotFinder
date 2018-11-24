@@ -20,24 +20,19 @@
             </tr>
             </thead>
             <tbody class="text-left">
+            <?php
+            global $customers;
+            foreach ($customers as $customer): ?>
             <tr>
-                <td>1</td>
-                <td>schomber</td>
-                <td>Martin Peraic</td>
-                <td>martin.peraic@students.fhnw.ch</td>
+                <td><?php echo $customer["uid"] ?></td>
+                <td><?php echo $customer["uusername"] ?></td>
+                <td><?php echo $customer["ufname"] ." ". $customer["usname"] ?></td>
+                <td><?php echo $customer["semail"] ?></td>
                 <td>
-                    <div class="btn-group" role="group"><button class="btn btn-secondary" type="button"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button"><i class="fa fa-remove"></i></button></div>
+                    <div class="btn-group" role="group"><a href="user/edit?id=<?php echo $customer["uid"] ?>" class="btn btn-secondary" type="button"><i class="fa fa-edit"></i></a><a href="user/delete?id=<?php echo $customer["uid"] ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i></a></div>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>menogu</td>
-                <td>Philipp Labhart</td>
-                <td>boba@partyheld.de</td>
-                <td>
-                    <div class="btn-group" role="group"><button class="btn btn-secondary" type="button"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button"><i class="fa fa-remove"></i></button></div>
-                </td>
-            </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

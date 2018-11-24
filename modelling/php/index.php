@@ -35,6 +35,11 @@ Router::route("GET", "/register", function () {
     require_once("view/register.php");
 });
 
+Router::route("GET", "/logout", function () {
+    session_destroy();
+    Router::redirect("/login");
+});
+
 Router::route("POST", "/register", function () {
     $username = $_POST["username"];
     $firstname = $_POST["firstname"];
@@ -73,6 +78,8 @@ Router::route("POST", "/login", function () {
             session_regenerate_id(true);
             $_SESSION["userLogin"]["username"] = $customer["uusername"];
             $_SESSION["userLogin"]["email"] = $email;
+            $_SESSION["userLogin"]["firstname"] =$customer["ufname"];
+            $_SESSION["userLogin"]["surname"] =$customer["usname"];
             $_SESSION["userLogin"]["id"] = $customer["uid"];
             if(password_needs_rehash($customer["spassword"], PASSWORD_DEFAULT)){
                 $stml = $pdoInstance->prepare('
@@ -87,14 +94,82 @@ Router::route("POST", "/login", function () {
     Router::redirect("/");
 });
 
-Router::route("GET", "/logout", function () {
-    session_destroy();
-    Router::redirect("/login");
-});
+
 
 Router::route_auth("GET", "/", $authFunction, function () {
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+        SELECT * FROM customer ORDER BY uid;');
+   // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
+    $stmt->execute();
+    global $customers;
+    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
     layoutSetContent("userList.php");
 });
 
+
+Router::route_auth("GET", "/userList", $authFunction, function (){
+    Router::redirect("/");
+});
+
+Router::route_auth("GET", "/user/delete", $authFunction, function (){
+    $id = $_GET["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+        DELETE FROM customer
+            WHERE uid = :id
+    ');
+    $stmt->bindValue(':id', $id);
+    if($_SESSION["userLogin"]["id"] != $id) {
+        $stmt->execute();
+    }
+    Router::redirect("/");
+});
+
+Router::route_auth("GET", "/user/edit", $authFunction, function (){
+    $id = $_GET["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare(' 
+       SELECT * FROM customer WHERE uid = :id;');
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+    global $customer;
+    $customer = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+
+    layoutSetContent("editUser.php");
+
+});
+
+//TODO Implement functionality for updating user from /edit path
+Router::route_auth("GET", "/user/update", $authFunction, function (){
+    $id = $_GET["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare(' 
+       SELECT * FROM customer WHERE uid = :id;');
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+    global $customer;
+    $customer = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+
+    layoutSetContent("editUser.php");
+
+});
+
+
+Router::route_auth("GET", "/addSpot", $authFunction, function (){
+    layoutSetContent("addSpot.php");
+});
+
+Router::route_auth("GET", "/editUser", $authFunction, function (){
+    layoutSetContent("editUser.php");
+});
+
+Router::route_auth("GET", "/editSpot", $authFunction, function (){
+    layoutSetContent("editSpot.php");
+});
+
+Router::route_auth("GET", "/spotList", $authFunction, function (){
+    layoutSetContent("spotList.php");
+});
 
 Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'], $errorFunction);
