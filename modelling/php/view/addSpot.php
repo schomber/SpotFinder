@@ -20,10 +20,12 @@
             <div class="col"><div id="addMap"></div></div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input class="form-control" type="text" name="s_address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein"></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <fieldset disabled=""><input class="form-control" id="address" type="text" name="s_address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein"></fieldset>
+            </div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><select class="form-control" name="s_category" required=""><optgroup label="Category"><option value="0" selected="">Freestyle</option><option value="1">Racing</option><option value="2">Longrange</option><option value="3">everything</option></optgroup></select></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><select class="form-control" name="s_category" required=""><optgroup label="Category"><option value="0" selected="">Freestyle</option><option value="1">Racing</option><option value="2">Longrange</option><option value="3">All</option></optgroup></select></div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><textarea class="form-control" rows="6" name="s_comment" placeholder="additional comments?"></textarea></div>
@@ -36,18 +38,17 @@
 
 <script>
     var map, infoWindow;
-    var label = 'S';
     var marker;
     var cityCircle;
     var myLatlng;
-
+    var geocoder;
 
 
 
 
     function initMap() {
         myLatlng = new google.maps.LatLng(47.55660371,7.58786201);
-        //var geocoder = new google.maps.Geocoder;
+        geocoder = new google.maps.Geocoder;
 
         map = new google.maps.Map(document.getElementById('addMap'), {
             center: myLatlng,
@@ -62,20 +63,25 @@
             fillOpacity: 0.2,
             center: myLatlng,
             map: map,
-            radius: 100
+            radius: 50
         });
 
         marker = new google.maps.Marker({
             position: myLatlng,
-            label: label,
-            map: map
+            map: map,
+            animation: google.maps.Animation.DROP
         });
+
+
+        geocodeLatLng(geocoder, map, myLatlng);
 
         google.maps.event.addListener(map, 'click', function(event) {
             marker.setPosition();
-            myLatlng = {lat: event.latLng.lat(), lng: event.latLng.lng()}
+            myLatlng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
             marker.setPosition(myLatlng);
             cityCircle.setCenter(myLatlng);
+            toggleBounce();
+            geocodeLatLng(geocoder, map, myLatlng);
         });
 
         // HTML 5 Geolocation
@@ -88,6 +94,8 @@
 
                 marker.setPosition(myLatlng);
                 cityCircle.setCenter(myLatlng);
+                geocodeLatLng(geocoder, map, myLatlng);
+
 
                 map.setCenter(myLatlng);
             }, function() {
@@ -98,21 +106,26 @@
             handleLocationError(false, infoWindow, map.getCenter());
         }
 
-
+       // initAutocomplete();
     }
 
-    function createRadiusCircle(location, map) {
-        var cityCircle = new google.maps.Circle({
-            strokeColor: '#000000',
-            strokeOpacity: 0.7,
-            strokeWeight: 1,
-            fillColor: '#8eff88',
-            fillOpacity: 0.4,
-            map: map,
-            center: location,
-            radius: 500
-        });
+    function toggleBounce() {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
 
+    function geocodeLatLng(geocoder, map, location) {
+        geocoder.geocode({'location': location}, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    document.getElementById("address").setAttribute('value', results[0].formatted_address);
+
+                } else {
+                    window.alert('No results found');
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
