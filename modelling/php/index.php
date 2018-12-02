@@ -140,18 +140,37 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
 
 });
 
-//TODO Implement functionality for updating user from /edit path
-Router::route_auth("GET", "/user/update", $authFunction, function (){
-    $id = $_GET["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare(' 
-       SELECT * FROM customer WHERE uid = :id;');
-    $stmt->bindValue(':id', $id);
-    $stmt->execute();
-    global $customer;
-    $customer = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+Router::route_auth("POST", "/user/update", $authFunction, function (){
+    $id = $_POST["id"];
+    $username = $_POST["username"];
+    $firstname = $_POST["firstname"];
+    $surname = $_POST["surname"];
+    $email = $_POST["email"];
 
-    layoutSetContent("editUser.php");
+    if ($id === "") {
+        $pdoInstance = Database::connect();
+        $stmt = $pdoInstance->prepare('
+            INSERT INTO customer (uUsername, uFName, uSName, sEmail)
+            VALUES (:uUsername, :uFName , :uSName, :sEmail)');
+        $stmt->bindValue(':uUsername', $username);
+        $stmt->bindValue(':uFName', $firstname);
+        $stmt->bindValue(':uSName', $surname);
+        $stmt->bindValue(':sEmail', $email);
+        $stmt->execute();
+    } else {
+        $pdoInstance = Database::connect();
+        $stmt = $pdoInstance->prepare('
+            UPDATE customer SET ufname = :uFName,
+                usname = :uSName,
+                semail = :sEmail
+            WHERE uid =:id');
+        $stmt->bindValue(':uFName', "test");
+        $stmt->bindValue(':uSName', $surname);
+        $stmt->bindValue(':sEmail', $email);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+    }
+    Router::redirect("/");
 
 });
 
