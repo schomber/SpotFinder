@@ -24,12 +24,12 @@
             global $customers;
             foreach ($customers as $customer): ?>
             <tr>
-                <td><?php echo $customer["uid"] ?></td>
-                <td><?php echo $customer["uusername"] ?></td>
-                <td><?php echo $customer["ufname"] ." ". $customer["usname"] ?></td>
-                <td><?php echo $customer["semail"] ?></td>
+                <td><?php echo $customer["id"] ?></td>
+                <td><?php echo $customer["username"] ?></td>
+                <td><?php echo $customer["firstname"] ." ". $customer["surname"] ?></td>
+                <td><?php echo $customer["email"] ?></td>
                 <td>
-                    <div class="btn-group" role="group"><a href="user/edit?id=<?php echo $customer["uid"] ?>" class="btn btn-secondary" type="button"><i class="fa fa-edit"></i></a><a href="user/delete?id=<?php echo $customer["uid"] ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i></a></div>
+                    <div class="btn-group" role="group"><a href="user/edit?id=<?php echo $customer["id"] ?>" class="btn btn-secondary" type="button"><i class="fa fa-edit"></i></a><a href="user/delete?id=<?php echo $customer["id"] ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i></a></div>
                 </td>
             </tr>
             <?php endforeach; ?>

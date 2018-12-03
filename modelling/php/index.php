@@ -47,18 +47,18 @@ Router::route("POST", "/register", function () {
     $email = $_POST["email"];
     $pdoInstance = Database::connect();
     $stmt = $pdoInstance->prepare('
-      INSERT INTO customer (uUsername, uFName, uSName, sEmail, sPassword)
-        SELECT :uUsername, :uFName, :uSName, :sEmail, :sPassword
+      INSERT INTO customer (username, firstname, surname, email, password)
+        SELECT :username, :firstname, :surname, :email, :password
         WHERE NOT EXISTS (
-          SELECT sEmail FROM customer WHERE sEmail = :emailExist
+          SELECT email FROM customer WHERE email = :emailExist
         );
     ');
-    $stmt->bindValue(':uUsername', $username);
-    $stmt->bindValue(':uFName', $firstname);
-    $stmt->bindValue(':uSName', $surname);
-    $stmt->bindValue(':sEmail', $email);
+    $stmt->bindValue(':username', $username);
+    $stmt->bindValue(':firstname', $firstname);
+    $stmt->bindValue(':surname', $surname);
+    $stmt->bindValue(':email', $email);
     $stmt->bindValue(':emailExist', $email);
-    $stmt->bindValue(':sPassword', password_hash($_POST["password"], PASSWORD_DEFAULT));
+    $stmt->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
     $stmt->execute();
 
     Router::redirect("/logout");
@@ -69,22 +69,22 @@ Router::route("POST", "/login", function () {
     $email = $_POST["email"];
     $pdoInstance = Database::connect();
     $stml = $pdoInstance->prepare('
-        SELECT * FROM customer WHERE semail = :email;');
+        SELECT * FROM customer WHERE email = :email;');
     $stml->bindValue(':email', $email);
     $stml->execute();
     if($stml->rowCount()>0) {
         $customer = $stml->fetchAll(PDO::FETCH_ASSOC)[0];
-        if(password_verify($_POST["password"], $customer["spassword"])) {
+        if(password_verify($_POST["password"], $customer["password"])) {
             session_regenerate_id(true);
-            $_SESSION["userLogin"]["username"] = $customer["uusername"];
+            $_SESSION["userLogin"]["username"] = $customer["username"];
             $_SESSION["userLogin"]["email"] = $email;
-            $_SESSION["userLogin"]["firstname"] =$customer["ufname"];
-            $_SESSION["userLogin"]["surname"] =$customer["usname"];
-            $_SESSION["userLogin"]["id"] = $customer["uid"];
-            if(password_needs_rehash($customer["spassword"], PASSWORD_DEFAULT)){
+            $_SESSION["userLogin"]["firstname"] =$customer["firstname"];
+            $_SESSION["userLogin"]["surname"] =$customer["surname"];
+            $_SESSION["userLogin"]["id"] = $customer["id"];
+            if(password_needs_rehash($customer["password"], PASSWORD_DEFAULT)){
                 $stml = $pdoInstance->prepare('
-                UPDATE customer SET spassword=:password WHERE uid =:id;');
-                $stml->bindValue(':id', $customer["uid"]);
+                UPDATE customer SET password=:password WHERE id =:id;');
+                $stml->bindValue(':id', $customer["id"]);
                 $stml->bindValue(':password', password_hash(($_POST["password"]),PASSWORD_DEFAULT));
                 $stml->execute();
 
@@ -99,7 +99,7 @@ Router::route("POST", "/login", function () {
 Router::route_auth("GET", "/", $authFunction, function () {
     $pdoInstance = Database::connect();
     $stmt = $pdoInstance->prepare('
-        SELECT * FROM customer ORDER BY uid;');
+        SELECT * FROM customer ORDER BY id;');
    // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
     $stmt->execute();
     global $customers;
@@ -117,7 +117,7 @@ Router::route_auth("GET", "/user/delete", $authFunction, function (){
     $pdoInstance = Database::connect();
     $stmt = $pdoInstance->prepare('
         DELETE FROM customer
-            WHERE uid = :id
+            WHERE id = :id
     ');
     $stmt->bindValue(':id', $id);
     if($_SESSION["userLogin"]["id"] != $id) {
@@ -130,7 +130,7 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
     $id = $_GET["id"];
     $pdoInstance = Database::connect();
     $stmt = $pdoInstance->prepare(' 
-       SELECT * FROM customer WHERE uid = :id;');
+       SELECT * FROM customer WHERE id = :id;');
     $stmt->bindValue(':id', $id);
     $stmt->execute();
     global $customer;
@@ -139,7 +139,7 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
     layoutSetContent("editUser.php");
 
 });
-
+//TODO Something with the update does not work as planned... research about causes
 Router::route_auth("POST", "/user/update", $authFunction, function (){
     $id = $_POST["id"];
     $username = $_POST["username"];
@@ -150,28 +150,53 @@ Router::route_auth("POST", "/user/update", $authFunction, function (){
     if ($id === "") {
         $pdoInstance = Database::connect();
         $stmt = $pdoInstance->prepare('
-            INSERT INTO customer (uUsername, uFName, uSName, sEmail)
-            VALUES (:uUsername, :uFName , :uSName, :sEmail)');
-        $stmt->bindValue(':uUsername', $username);
-        $stmt->bindValue(':uFName', $firstname);
-        $stmt->bindValue(':uSName', $surname);
-        $stmt->bindValue(':sEmail', $email);
+            INSERT INTO customer (username, firstname, surname, email)
+            VALUES (:username, :firstname , :surname, :email)');
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':firstname', $firstname);
+        $stmt->bindValue(':surname', $surname);
+        $stmt->bindValue(':email', $email);
         $stmt->execute();
     } else {
         $pdoInstance = Database::connect();
         $stmt = $pdoInstance->prepare('
-            UPDATE customer SET ufname = :uFName,
-                usname = :uSName,
-                semail = :sEmail
-            WHERE uid =:id');
-        $stmt->bindValue(':uFName', "test");
-        $stmt->bindValue(':uSName', $surname);
-        $stmt->bindValue(':sEmail', $email);
+            UPDATE customer SET firstname = :firstname,
+                username = :username,
+                email = :email
+            WHERE id =:id');
+        $stmt->bindValue(':firstname', "test");
+        $stmt->bindValue(':username', $surname);
+        $stmt->bindValue(':email', $email);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
     }
     Router::redirect("/");
 
+});
+
+Router::route("POST", "/addSpot", function () {
+    $name = $_POST["name"];
+    $address = $_POST["address"];
+    $latitude = $_POST["latitude"];
+    $longitude = $_POST["longitude"];
+    $category = $_POST["category"];
+    $comment = $_POST["comment"];
+    $id = $_SESSION["userLogin"]["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+      INSERT INTO spot (lat, lng, name, address, category, scomment, userid)
+        SELECT :lat, :lng, :name, :address, :category, :scomment, :userid
+    ');
+    $stmt->bindValue(':lat', $latitude);
+    $stmt->bindValue(':lng', $longitude);
+    $stmt->bindValue(':name', $name);
+    $stmt->bindValue(':address', $address);
+    $stmt->bindValue(':category', $category);
+    $stmt->bindValue(':scomment', $comment);
+    $stmt->bindValue(':userid', $id);
+    $stmt->execute();
+
+    Router::redirect("spotList");
 });
 
 
