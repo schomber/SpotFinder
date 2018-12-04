@@ -17,15 +17,18 @@ use config\Config;
         </div>
         <div class="form-row" style="margin-top: 20px;">
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
-                <fieldset disabled="">Address<input class="form-control" id="address" type="text" name="address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein"></fieldset>
+                <label for="address">Address</label>
+                <input class="form-control" id="address" type="text" name="address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein" readonly>
             </div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
-                <fieldset disabled="">Latitude<input class="form-control" id="lat" type="text" name="latitude" required="" placeholder="47.55660371"></fieldset>
+                <label for="lat">Latitude</label>
+                <input class="form-control" id="lat" type="text" name="latitude" required="" readonly>
             </div>
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
-                <fieldset disabled="">Longitude<input class="form-control" id="lng" type="text" name="longitude" required="" placeholder="7.58786201"></fieldset>
+                <label for="lng">Longitude</label>
+                <input class="form-control" id="lng" type="text" name="longitude" required="" readonly>
             </div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
@@ -40,39 +43,7 @@ use config\Config;
     </form>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    //TODO TESTinggggg
-    $('#spot').on('click', function() {
-       var latitude = $('#spot').find('#lat').val();
-       var longitude = $('#spot').find('#lng').val();
-       var address = $('#spot').find('#address').val();
-       var category = $('#spot').find('#category').val();
-       var comment = $('#spot').find('#comment').val();
-        var name = $('#spot').find('#name').val();
-
-        $.ajax({
-            method: "POST",
-            url: "addSpot",
-            data: {
-
-                name:name,
-                address:address,
-                latitude: latitude,
-                longitude: longitude,
-                category: category,
-                comment: comment
-            }
-        })
-            .done(function() {
-                console.log('success');
-
-            })
-            .fail(function() {
-                console.log('error');
-            })
-    });
-
     var map, infoWindow;
     var marker;
     var cityCircle;

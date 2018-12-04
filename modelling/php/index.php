@@ -139,7 +139,7 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
     layoutSetContent("editUser.php");
 
 });
-//TODO Something with the update does not work as planned... research about causes
+
 Router::route_auth("POST", "/user/update", $authFunction, function (){
     $id = $_POST["id"];
     $username = $_POST["username"];
@@ -170,8 +170,8 @@ Router::route_auth("POST", "/user/update", $authFunction, function (){
         $stmt->bindValue(':id', $id);
         $stmt->execute();
     }
-    Router::redirect("/");
 
+    Router::redirect("/");
 });
 
 Router::route("POST", "/addSpot", function () {
@@ -196,7 +196,7 @@ Router::route("POST", "/addSpot", function () {
     $stmt->bindValue(':userid', $id);
     $stmt->execute();
 
-    Router::redirect("spotList");
+    Router::redirect("/spotList");
 });
 
 
@@ -213,6 +213,13 @@ Router::route_auth("GET", "/editSpot", $authFunction, function (){
 });
 
 Router::route_auth("GET", "/spotList", $authFunction, function (){
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+        SELECT * FROM spot ORDER BY id;');
+    // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
+    $stmt->execute();
+    global $spots;
+    $spots = $stmt->fetchAll(PDO::FETCH_ASSOC);
     layoutSetContent("spotList.php");
 });
 
