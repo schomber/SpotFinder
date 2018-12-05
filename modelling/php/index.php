@@ -164,7 +164,7 @@ Router::route_auth("POST", "/user/update", $authFunction, function (){
                 username = :username,
                 email = :email
             WHERE id =:id');
-        $stmt->bindValue(':firstname', "test");
+        $stmt->bindValue(':firstname', "$firstname");
         $stmt->bindValue(':username', $surname);
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':id', $id);
@@ -204,18 +204,67 @@ Router::route_auth("GET", "/addSpot", $authFunction, function (){
     layoutSetContent("addSpot.php");
 });
 
-Router::route_auth("GET", "/editUser", $authFunction, function (){
-    layoutSetContent("editUser.php");
+Router::route_auth("GET", "/spot/edit", $authFunction, function (){
+    $id = $_GET["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare(' 
+       SELECT * FROM spot WHERE id = :id;');
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+    global $spot;
+    $spot = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+
+    layoutSetContent("editSpot.php");
 });
 
-Router::route_auth("GET", "/editSpot", $authFunction, function (){
-    layoutSetContent("editSpot.php");
+//TODO implement check if user is allowed to do this
+Router::route_auth("GET", "/spot/delete", $authFunction, function (){
+    $id = $_GET["id"];
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+        DELETE FROM spot
+            WHERE id = :id
+    ');
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+    Router::redirect("/spotList");
+});
+
+Router::route_auth("POST", "/spot/update", $authFunction, function (){
+    $id = $_POST["id"];
+    $name = $_POST["name"];
+    $address = $_POST["address"];
+    $latitude = $_POST["latitude"];
+    $longitude = $_POST["longitude"];
+    $category = $_POST["category"];
+    $comment = $_POST["comment"];
+
+    $pdoInstance = Database::connect();
+    $stmt = $pdoInstance->prepare('
+        UPDATE spot SET name = :name,
+            address = :address,
+            lat = :lat,
+            lng = :lng,
+            category = :category,
+            scomment = :scomment
+        WHERE id =:id');
+    $stmt->bindValue(':name', "$name");
+    $stmt->bindValue(':address', $address);
+    $stmt->bindValue(':lat', $latitude);
+    $stmt->bindValue(':lng', $longitude);
+    $stmt->bindValue(':category', $category);
+    $stmt->bindValue(':scomment', $comment);
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+
+    Router::redirect("/spotList");
 });
 
 Router::route_auth("GET", "/spotList", $authFunction, function (){
     $pdoInstance = Database::connect();
     $stmt = $pdoInstance->prepare('
-        SELECT * FROM spot ORDER BY id;');
+        SELECT spot.id, lat, lng, name, address, category, username FROM spot INNER JOIN customer ON customer.id = spot.userid ORDER BY id;
+        ');
     // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
     $stmt->execute();
     global $spots;

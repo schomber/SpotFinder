@@ -21,16 +21,17 @@ use config\Config;
     <div class="row spotContainer" style="padding-top: 20px;padding-bottom: 5px;">
         <div class="col">
             <div class="row">
-                <div class="col-sm-12 col-md-4" style="padding: 0;padding-right: 15px;padding-left: 15px;padding-top: 0;">
-                    <iframe allowfullscreen="" frameborder="0" width="100%" height="550"
-                        src="https://www.google.com/maps/embed/v1/view
-                              ?key=AIzaSyCuXnCcm1Sq61688xAtHoCGRA5GcNYVxTA
-                              &center=-33.8569,151.2152
-                              &zoom=18
-                              &maptype=satellite"
-                            style="max-height: 300px;">
-                    </iframe></div>
-                <div class="col-sm-12 col-md-4" style="width: 100%;">
+                <div class="col-sm-12 col-lg-4 fadeElement" style="padding-bottom: 10px;padding-right: 15px;padding-left: 15px;padding-top: 0;">
+                    <iframe
+                            width="100%"
+                            height="400"
+                            align="center"
+                            frameborder="0"
+                            style="max-height: 310px; border:0"
+                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo Config::get("google.apikey")?>&q=<?php echo $spot['address']?>&center=<?php echo $spot['lat'] . "," . $spot['lng']?>&zoom=15" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col-sm-12 col-lg-4" style="width: 100%;">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -52,18 +53,18 @@ use config\Config;
                         </table>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-lg-4">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th class="text-center">SpotFinder: <?php echo $spot['category']?></th>
+                                <th class="text-center">SpotFinder: <?php echo $spot['username']?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group"><button class="btn btn-info" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</button><button class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</button></div>
+                                    <div class="btn-group" role="group"><a href="spot/edit?id=<?php echo $spot["id"] ?>" class="btn btn-info" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</a><a href="spot/delete?id=<?php echo $spot["id"] ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</a></div>
                                 </td>
                             </tr>
                             <tr>

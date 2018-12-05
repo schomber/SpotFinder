@@ -3,42 +3,120 @@
  * Created by PhpStorm.
  * User: schomber
  * Date: 14.11.2018
- * Time: 22:10
+ * Time: 22:08
  */
+use config\Config;
+global $spot;
 ?>
-<div>
-    <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-        <div class="container"><a class="navbar-brand" href="../index.html"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="register.html"><i class="fa fa-plus"></i>&nbsp;Spot</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="register.html">Find Spot</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="editUser.html">Edit Profile</a></li>
-                </ul>
+<div class="container spot-container">
+    <form id="spot" method="post" action="update">
+        <div class="form-row" style="margin-top: 0px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input id="name" class="form-control" type="hidden" name="id" required="" value="<?php echo !empty($spot["id"]) ? $spot["id"] : ''; ?>"></div>
+        </div>
+        <div class="form-row" style="margin-top: 0px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Spot Name<input id="name" class="form-control" type="text" name="name" required="" placeholder="Awesome Spot XYZ" value="<?php echo !empty($spot["name"]) ? $spot["name"] : ''; ?>"></div>
+        </div>
+        <div class="form-row fadeElement" style="margin-top: 20px;">
+            <div class="col"><div id="addMap"></div></div>
+        </div>
+        <div class="form-row" style="margin-top: 20px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <label for="address">Address</label>
+                <input class="form-control" id="address" type="text" name="address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein" value="<?php echo !empty($spot["address"]) ? $spot["address"] : ''; ?>" readonly>
             </div>
         </div>
-    </nav>
-</div>
-<div class="container spot-container">
-    <form method="post">
-        <div class="form-row" style="margin-top: 0px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input class="form-control" type="text" name="s_title" required="" placeholder="spot name"></div>
+        <div class="form-row" style="margin-top: 20px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <label for="lat">Latitude</label>
+                <input class="form-control" id="lat" type="text" name="latitude" required="" value="<?php echo !empty($spot["lat"]) ? $spot["lat"] : ''; ?>" readonly>
+            </div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <label for="lng">Longitude</label>
+                <input class="form-control" id="lng" type="text" name="longitude" required="" value="<?php echo !empty($spot["lng"]) ? $spot["lng"] : ''; ?>" readonly>
+            </div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
-            <div class="col"><iframe allowfullscreen="" frameborder="0" width="100%" height="400" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyCuXnCcm1Sq61688xAtHoCGRA5GcNYVxTA&amp;q=Big+Ben&amp;zoom=11" class="gmaps" style="max-height: 300px;padding-right: 0;"></iframe></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Category<select id="category" class="form-control" name="category" required=""><optgroup label="Category"><option value="Freestyle" selected="">Freestyle</option><option value="Racing">Racing</option><option value="Longrange">Longrange</option><option value="All">All</option></optgroup></select></div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input class="form-control" type="text" name="s_address" required="" placeholder="Langackerstrasse 11, 4142 Münchenstein"></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Additional Comments?<textarea id="comment" class="form-control" rows="6" name="comment" value="<?php echo !empty($spot["scomment"]) ? $spot["scomment"] : ''; ?>"></textarea></div>
         </div>
         <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><select class="form-control" name="s_category" required=""><optgroup label="Category"><option value="0" selected="">Freestyle</option><option value="1">Racing</option><option value="2">Both</option></optgroup></select></div>
-        </div>
-        <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><textarea class="form-control" rows="6" name="s_comment" placeholder="additional comments?"></textarea></div>
-        </div>
-        <div class="form-row" style="margin-top: 20px;">
-            <div class="col-sm-12 col-md-4 offset-md-4"><button class="btn btn-primary btn-block save" type="submit" style="margin-top: 0;">Save Edit&nbsp;<i class="la la-save"></i></button></div>
+            <div class="col-sm-12 col-md-4 offset-md-4"><button class="btn btn-primary btn-block save" id="test" type="submit" style="margin-top: 0;">Save&nbsp;<i class="la la-save"></i></button></div>
         </div>
     </form>
 </div>
+
+<script>
+    var map;
+    var marker;
+    var cityCircle;
+    var myLatlng;
+    var geocoder;
+
+    function initMap() {
+        myLatlng = new google.maps.LatLng(document.getElementById("lat").getAttribute("value"),document.getElementById("lng").getAttribute("value"));
+        geocoder = new google.maps.Geocoder;
+
+        map = new google.maps.Map(document.getElementById('addMap'), {
+            center: myLatlng,
+            zoom: 16
+        });
+
+        cityCircle = new google.maps.Circle({
+            strokeColor: '#FFC600',
+            strokeOpacity: 0.9,
+            strokeWeight: 1,
+            fillColor: '#FFC600',
+            fillOpacity: 0.2,
+            center: myLatlng,
+            map: map,
+            radius: 50
+        });
+
+        marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            animation: google.maps.Animation.DROP
+        });
+
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            marker.setPosition();
+            myLatlng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+            marker.setPosition(myLatlng);
+            cityCircle.setCenter(myLatlng);
+            toggleBounce();
+            geocodeLatLng(geocoder, map, myLatlng);
+            printLatLong(myLatlng);
+        });
+    }
+
+    function printLatLong(location) {
+        document.getElementById("lat").setAttribute('value', location.lat);
+        document.getElementById("lng").setAttribute('value', location.lng);
+    }
+
+    function toggleBounce() {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+
+    function geocodeLatLng(geocoder, map, location) {
+        geocoder.geocode({'location': location}, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    document.getElementById("address").setAttribute('value', results[0].formatted_address);
+                } else {
+                    window.alert('No results found');
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo Config::get('google.apikey') ?>&callback=initMap"
+        async defer>
+</script>
