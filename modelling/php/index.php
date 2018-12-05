@@ -11,6 +11,8 @@ require_once("config/Autoloader.php");
 
 use router\Router;
 use database\Database;
+use http\HTTPException;
+
 
 session_start();
 
@@ -272,4 +274,9 @@ Router::route_auth("GET", "/spotList", $authFunction, function (){
     layoutSetContent("spotList.php");
 });
 
-Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'], $errorFunction);
+try {
+    Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
+} catch (HTTPException $exception) {
+    $exception->getHeader();
+    require_once("view/404.php");
+}
