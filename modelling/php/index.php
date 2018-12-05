@@ -12,7 +12,12 @@ require_once("config/Autoloader.php");
 use router\Router;
 use database\Database;
 use http\HTTPException;
-
+use domain\Customer;
+use domain\Spot;
+use domain\Role;
+use dao\CustomerDAO;
+use dao\SpotDAO;
+use dao\RoleDAO;
 
 session_start();
 
@@ -42,54 +47,40 @@ Router::route("GET", "/logout", function () {
     Router::redirect("/login");
 });
 
-Router::route("POST", "/register", function () {
-    $username = $_POST["username"];
-    $firstname = $_POST["firstname"];
-    $surname = $_POST["surname"];
-    $email = $_POST["email"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-      INSERT INTO customer (username, firstname, surname, email, password)
-        SELECT :username, :firstname, :surname, :email, :password
-        WHERE NOT EXISTS (
-          SELECT email FROM customer WHERE email = :emailExist
-        );
-    ');
-    $stmt->bindValue(':username', $username);
-    $stmt->bindValue(':firstname', $firstname);
-    $stmt->bindValue(':surname', $surname);
-    $stmt->bindValue(':email', $email);
-    $stmt->bindValue(':emailExist', $email);
-    $stmt->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
-    $stmt->execute();
+Router::route_auth("GET", "/", $authFunction, function () {
+    $customerDAO = new CustomerDAO();
+    global $customers;
+    $customers = $customerDAO->listAll();
+    layoutSetContent("userList.php");
+});
 
+Router::route("POST", "/register", function () {
+    $customer = new Customer();
+    $customer->setUsername($_POST['username']);
+    $customer->setFirstname($_POST['firstname']);
+    $customer->setSurname($_POST["surname"]);
+    $customer->setEmail($_POST["email"]);
+    $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
+    $customerDAO = new CustomerDAO();
+    $customerDAO->create($customer);
     Router::redirect("/logout");
 });
 
-
 Router::route("POST", "/login", function () {
     $email = $_POST["email"];
-    $pdoInstance = Database::connect();
-    $stml = $pdoInstance->prepare('
-        SELECT * FROM customer WHERE email = :email;');
-    $stml->bindValue(':email', $email);
-    $stml->execute();
-    if($stml->rowCount()>0) {
-        $customer = $stml->fetchAll(PDO::FETCH_ASSOC)[0];
-        if(password_verify($_POST["password"], $customer["password"])) {
+    $customerDAO = new CustomerDAO();
+    $customer = $customerDAO->findByEmail($email);
+    if (isset($customer)) {
+        if (password_verify($_POST["password"], $customer->getPassword())) {
             session_regenerate_id(true);
-            $_SESSION["userLogin"]["username"] = $customer["username"];
-            $_SESSION["userLogin"]["email"] = $email;
-            $_SESSION["userLogin"]["firstname"] =$customer["firstname"];
-            $_SESSION["userLogin"]["surname"] =$customer["surname"];
-            $_SESSION["userLogin"]["id"] = $customer["id"];
-            if(password_needs_rehash($customer["password"], PASSWORD_DEFAULT)){
-                $stml = $pdoInstance->prepare('
-                UPDATE customer SET password=:password WHERE id =:id;');
-                $stml->bindValue(':id', $customer["id"]);
-                $stml->bindValue(':password', password_hash(($_POST["password"]),PASSWORD_DEFAULT));
-                $stml->execute();
-
+            $_SESSION["userLogin"]["username"] = $customer->getUsername();
+            $_SESSION["userLogin"]["email"] = $customer->getEmail();
+            $_SESSION["userLogin"]["firstname"] = $customer->getFirstname();
+            $_SESSION["userLogin"]["surname"] =$customer->getSurname();
+            $_SESSION["userLogin"]["id"] = $customer->getId();
+            if (password_needs_rehash($customer->getPassword(), PASSWORD_DEFAULT)) {
+                $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
+                $customerDAO->update($customer);
             }
         }
     }
@@ -98,16 +89,7 @@ Router::route("POST", "/login", function () {
 
 
 
-Router::route_auth("GET", "/", $authFunction, function () {
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-        SELECT * FROM customer ORDER BY id;');
-   // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
-    $stmt->execute();
-    global $customers;
-    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    layoutSetContent("userList.php");
-});
+
 
 
 Router::route_auth("GET", "/userList", $authFunction, function (){
