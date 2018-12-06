@@ -6,7 +6,7 @@
  * Time: 22:11
  */
 
-require_once("view/layout.php");
+
 require_once("config/Autoloader.php");
 
 use router\Router;
@@ -18,8 +18,17 @@ use domain\Role;
 use dao\CustomerDAO;
 use dao\SpotDAO;
 use dao\RoleDAO;
+use view\TemplateView;
 
 session_start();
+
+function layoutRendering(TemplateView $contentView){
+    $view = new TemplateView("layout.php");
+    $view->header = (new TemplateView("header.php"))->render();
+    $view->content = $contentView->render();
+    $view->footer = (new TemplateView("footer.php"))->render();
+    echo $view->render();
+}
 
 $authFunction = function () {
     if (isset($_SESSION["userLogin"])) {
@@ -29,17 +38,18 @@ $authFunction = function () {
     return false;
 };
 
+//TODO Check if still neeed
 $errorFunction = function () {
     Router::errorHeader();
     require_once("view/404.php");
 };
 
 Router::route("GET", "/login", function () {
-    require_once("view/login.php");
+    echo (new TemplateView("login.php"))->render();
 });
 
 Router::route("GET", "/register", function () {
-    require_once("view/register.php");
+    echo (new TemplateView("register.php"))->render();
 });
 
 Router::route("GET", "/logout", function () {
@@ -48,10 +58,9 @@ Router::route("GET", "/logout", function () {
 });
 
 Router::route_auth("GET", "/", $authFunction, function () {
-    $customerDAO = new CustomerDAO();
-    global $customers;
-    $customers = $customerDAO->listAll();
-    layoutSetContent("userList.php");
+    $contentView = new TemplateView("userList.php");
+    $contentView->customers = (new CustomerDAO())->listAll();
+    layoutRendering($contentView);
 });
 
 Router::route("POST", "/register", function () {
@@ -87,10 +96,6 @@ Router::route("POST", "/login", function () {
     Router::redirect("/");
 });
 
-Router::route_auth("GET", "/userList", $authFunction, function (){
-    Router::redirect("/");
-});
-
 Router::route_auth("GET", "/user/delete", $authFunction, function (){
     $id = $_GET["id"];
     $customerDAO = new CustomerDAO();
@@ -104,10 +109,9 @@ Router::route_auth("GET", "/user/delete", $authFunction, function (){
 
 Router::route_auth("GET", "/user/edit", $authFunction, function (){
     $id = $_GET["id"];
-    $customerDAO = new CustomerDAO();
-    global $customer;
-    $customer = $customerDAO->read($id);
-    layoutSetContent("editUser.php");
+    $contentView = new TemplateView("editUser.php");
+    $contentView->customer = (new CustomerDAO())->read($id);
+    layoutRendering($contentView);
 });
 
 Router::route_auth("POST", "/user/update", $authFunction, function (){
@@ -149,15 +153,15 @@ Router::route("POST", "/addSpot", function () {
 
 
 Router::route_auth("GET", "/addSpot", $authFunction, function (){
-    layoutSetContent("addSpot.php");
+    $contentView = new TemplateView("addSpot.php");
+    layoutRendering($contentView);
 });
 
 Router::route_auth("GET", "/spot/edit", $authFunction, function (){
     $id = $_GET["id"];
-    $spotDAO = new SpotDAO();
-    global $spot;
-    $spot = $spotDAO->read($id);
-    layoutSetContent("editSpot.php");
+    $contentView = new TemplateView("editSpot.php");
+    $contentView->spot = (new SpotDAO())->read($id);
+    layoutRendering($contentView);
 });
 
 //TODO implement check if user is allowed to do this
@@ -186,15 +190,14 @@ Router::route_auth("POST", "/spot/update", $authFunction, function (){
 
 //TODO Role implementation that only elevated users or creator are able to edit or delete
 Router::route_auth("GET", "/spotList", $authFunction, function (){
-    $spotDAO = new SpotDAO();
-    global $spots;
-    $spots = $spotDAO->listAllSpots();
-    layoutSetContent("spotList.php");
+    $contentView = new TemplateView("spotList.php");
+    $contentView->spots = (new SpotDAO())->listAllSpots();
+    layoutRendering($contentView);
 });
 
 try {
     Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
 } catch (HTTPException $exception) {
     $exception->getHeader();
-    require_once("view/404.php");
+    echo (new TemplateView("404.php"))->render();
 }

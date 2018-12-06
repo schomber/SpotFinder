@@ -5,6 +5,7 @@
  * Date: 14.11.2018
  * Time: 22:13
  */
+use view\TemplateView;
 ?>
 <div class="container spot-container"></div>
 <div class="container list-header"><h1 class="text-center">User Management</h1>
@@ -21,13 +22,12 @@
             </thead>
             <tbody class="text-left">
             <?php
-            global $customers;
-            foreach ($customers as $customer): ?>
+            foreach ($this->customers as $customer): ?>
                 <tr>
                     <td><?php echo $customer->getID(); ?></td>
-                    <td><?php echo $customer->getUsername(); ?></td>
-                    <td><?php echo $customer->getFirstname() ." ". $customer->getSurname(); ?></td>
-                    <td><?php echo $customer->getEmail() ?></td>
+                    <td><?php echo TemplateView::noHTML($customer->getUsername()); ?></td>
+                    <td><?php echo TemplateView::noHTML($customer->getFirstname() ." ". $customer->getSurname()); ?></td>
+                    <td><?php echo TemplateView::noHTML($customer->getEmail()) ?></td>
                     <td>
                         <div class="btn-group" role="group">
                             <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">
