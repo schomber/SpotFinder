@@ -56,6 +56,7 @@ class SpotDAO extends BasicDAO
         $stmt->bindValue(':lng', $spot->getLng());
         $stmt->bindValue(':category', $spot->getCategory());
         $stmt->bindValue(':scomment', $spot->getComment());
+        $stmt->bindValue(':id', $spot->getId());
         $stmt->execute();
         return $this->read($spot->getId());
     }
@@ -67,6 +68,14 @@ class SpotDAO extends BasicDAO
         ');
         $stmt->bindValue(':id', $spot->getId());
         $stmt->execute();
+    }
+
+    public function listAllSpots() {
+        $stmt = $this->pdoInstance->prepare('
+        SELECT spot.id, lat, lng, name, address, category, userid, username FROM spot INNER JOIN customer ON customer.id = spot.userid ORDER BY id;
+        ');
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, "domain\Spot");
     }
 
     public function findByCustomer($userId) {

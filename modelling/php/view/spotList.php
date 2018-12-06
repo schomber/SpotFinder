@@ -28,7 +28,7 @@ use config\Config;
                             align="center"
                             frameborder="0"
                             style="max-height: 310px; border:0"
-                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo Config::get("google.apikey")?>&q=<?php echo $spot['address']?>&center=<?php echo $spot['lat'] . "," . $spot['lng']?>&zoom=15" allowfullscreen>
+                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo Config::get("google.apikey")?>&q=<?php echo $spot->getAddress()?>&center=<?php echo $spot->getLat() . "," . $spot->getLng()?>&zoom=15" allowfullscreen>
                     </iframe>
                 </div>
                 <div class="col-sm-12 col-lg-4" style="width: 100%;">
@@ -36,18 +36,18 @@ use config\Config;
                         <table class="table">
                             <thead>
                             <tr>
-                                <th class="text-center"><?php echo "#" . $spot['id']?></th>
+                                <th class="text-center"><?php echo "#" . $spot->getId()?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td class="text-center"><strong>Spot Name</strong><br> <?php echo $spot['name']?></td>
+                                <td class="text-center"><strong>Spot Name</strong><br> <?php echo $spot->getName()?></td>
                             </tr>
                             <tr>
-                                <td class="text-center"><strong>Spot Address</strong><br> <?php echo $spot['address']?></td>
+                                <td class="text-center"><strong>Spot Address</strong><br> <?php echo $spot->getAddress()?></td>
                             </tr>
                             <tr>
-                                <td class="text-center"><strong>Spot Category</strong><br> <?php echo $spot['category']?></td>
+                                <td class="text-center"><strong>Spot Category</strong><br> <?php echo $spot->getCategory()?></td>
                             </tr>
                             </tbody>
                         </table>
@@ -58,13 +58,16 @@ use config\Config;
                         <table class="table">
                             <thead>
                             <tr>
-                                <th class="text-center">SpotFinder: <?php echo $spot['username']?></th>
+                                <th class="text-center">SpotFinder: <?php echo $spot->getUsername()?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group"><a href="spot/edit?id=<?php echo $spot["id"] ?>" class="btn btn-info" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</a><a href="spot/delete?id=<?php echo $spot["id"] ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</a></div>
+                                    <div class="btn-group" role="group">
+                                        <a href="spot/edit?id=<?php echo $spot->getId() ?>" class="btn btn-info" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                                        <a href="spot/delete?id=<?php echo $spot->getId() ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>

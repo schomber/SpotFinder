@@ -23,23 +23,22 @@
             <?php
             global $customers;
             foreach ($customers as $customer): ?>
-            <tr>
-                <td><?php echo $customer->getID(); ?></td>
-                <td><?php echo $customer->getUsername(); ?></td>
-                <td><?php echo $customer->getFirstname() ." ". $customer->getSurname(); ?></td>
-                <td><?php echo $customer->getEmail() ?></td>
-                <td>
-                    <div class="btn-group" role="group">
-                        <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a href="user/delete?id=<?php echo $customer->getID() ?>"class="btn btn-danger" type="button">
-                            <i class="fa fa-remove"></i>
-                        </a>
-                    </div>
-                </td>
-
-            </tr>
+                <tr>
+                    <td><?php echo $customer->getID(); ?></td>
+                    <td><?php echo $customer->getUsername(); ?></td>
+                    <td><?php echo $customer->getFirstname() ." ". $customer->getSurname(); ?></td>
+                    <td><?php echo $customer->getEmail() ?></td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="user/delete?id=<?php echo $customer->getID() ?>"class="btn btn-danger" type="button">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             <?php endforeach; ?>
             </tbody>
         </table>

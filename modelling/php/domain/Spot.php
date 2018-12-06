@@ -20,6 +20,16 @@ class Spot
     private $comment;
     private $userid;
 
+    private $username;
+    private $spot;
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return int
@@ -139,6 +149,38 @@ class Spot
     public function setUserid($userid)
     {
         $this->userid = $userid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpot()
+    {
+        return $this->spot;
+    }
+
+    /**
+     * @param mixed $spot
+     */
+    public function setSpot(array $spot)
+    {
+        $this->spot = $spot;
     }
 
 

@@ -157,6 +157,14 @@ class Customer
         $this->customer = $customer;
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 
 
 }

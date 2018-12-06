@@ -87,99 +87,63 @@ Router::route("POST", "/login", function () {
     Router::redirect("/");
 });
 
-
-
-
-
-
 Router::route_auth("GET", "/userList", $authFunction, function (){
     Router::redirect("/");
 });
 
 Router::route_auth("GET", "/user/delete", $authFunction, function (){
     $id = $_GET["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-        DELETE FROM customer
-            WHERE id = :id
-    ');
-    $stmt->bindValue(':id', $id);
+    $customerDAO = new CustomerDAO();
+    $customer = new Customer();
+    $customer->setId($id);
     if($_SESSION["userLogin"]["id"] != $id) {
-        $stmt->execute();
+        $customerDAO->delete($customer);
     }
     Router::redirect("/");
 });
 
 Router::route_auth("GET", "/user/edit", $authFunction, function (){
     $id = $_GET["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare(' 
-       SELECT * FROM customer WHERE id = :id;');
-    $stmt->bindValue(':id', $id);
-    $stmt->execute();
+    $customerDAO = new CustomerDAO();
     global $customer;
-    $customer = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-
+    $customer = $customerDAO->read($id);
     layoutSetContent("editUser.php");
-
 });
 
 Router::route_auth("POST", "/user/update", $authFunction, function (){
     $id = $_POST["id"];
-    $username = $_POST["username"];
-    $firstname = $_POST["firstname"];
-    $surname = $_POST["surname"];
-    $email = $_POST["email"];
+    echo $id;
+    $customerDAO = new CustomerDAO();
+    $customer = new Customer();
 
     if ($id === "") {
-        $pdoInstance = Database::connect();
-        $stmt = $pdoInstance->prepare('
-            INSERT INTO customer (username, firstname, surname, email)
-            VALUES (:username, :firstname , :surname, :email)');
-        $stmt->bindValue(':username', $username);
-        $stmt->bindValue(':firstname', $firstname);
-        $stmt->bindValue(':surname', $surname);
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
+        $customer->setUsername($_POST['username']);
+        $customer->setFirstname($_POST['firstname']);
+        $customer->setSurname($_POST["surname"]);
+        $customer->setEmail($_POST["email"]);
+        $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
+        $customerDAO->create($customer);
     } else {
-        $pdoInstance = Database::connect();
-        $stmt = $pdoInstance->prepare('
-            UPDATE customer SET firstname = :firstname,
-                username = :username,
-                email = :email
-            WHERE id =:id');
-        $stmt->bindValue(':firstname', "$firstname");
-        $stmt->bindValue(':username', $surname);
-        $stmt->bindValue(':email', $email);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        $customer->setId($id);
+        $customer->setFirstname($_POST['firstname']);
+        $customer->setSurname($_POST["surname"]);
+        $customer->setEmail($_POST["email"]);
+        $customerDAO->update($customer);
     }
-
     Router::redirect("/");
 });
 
 Router::route("POST", "/addSpot", function () {
-    $name = $_POST["name"];
-    $address = $_POST["address"];
-    $latitude = $_POST["latitude"];
-    $longitude = $_POST["longitude"];
-    $category = $_POST["category"];
-    $comment = $_POST["comment"];
-    $id = $_SESSION["userLogin"]["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-      INSERT INTO spot (lat, lng, name, address, category, scomment, userid)
-        SELECT :lat, :lng, :name, :address, :category, :scomment, :userid
-    ');
-    $stmt->bindValue(':lat', $latitude);
-    $stmt->bindValue(':lng', $longitude);
-    $stmt->bindValue(':name', $name);
-    $stmt->bindValue(':address', $address);
-    $stmt->bindValue(':category', $category);
-    $stmt->bindValue(':scomment', $comment);
-    $stmt->bindValue(':userid', $id);
-    $stmt->execute();
-
+    $spotDAO = new SpotDAO();
+    $spot = new Spot();
+    $spot->setName($_POST["name"]);
+    $spot->setLat($_POST["latitude"]);
+    $spot->setLng($_POST["longitude"]);
+    $spot->setAddress($_POST["address"]);
+    $spot->setCategory($_POST["category"]);
+    $spot->setComment($_POST["comment"]);
+    $spot->setUserid($_SESSION["userLogin"]["id"]);
+    $spotDAO->create($spot);
     Router::redirect("/spotList");
 });
 
@@ -190,69 +154,41 @@ Router::route_auth("GET", "/addSpot", $authFunction, function (){
 
 Router::route_auth("GET", "/spot/edit", $authFunction, function (){
     $id = $_GET["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare(' 
-       SELECT * FROM spot WHERE id = :id;');
-    $stmt->bindValue(':id', $id);
-    $stmt->execute();
+    $spotDAO = new SpotDAO();
     global $spot;
-    $spot = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-
+    $spot = $spotDAO->read($id);
     layoutSetContent("editSpot.php");
 });
 
 //TODO implement check if user is allowed to do this
 Router::route_auth("GET", "/spot/delete", $authFunction, function (){
     $id = $_GET["id"];
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-        DELETE FROM spot
-            WHERE id = :id
-    ');
-    $stmt->bindValue(':id', $id);
-    $stmt->execute();
+    $spotDAO = new SpotDAO();
+    $spot = new Spot();
+    $spot->setId($id);
+    $spotDAO->delete($spot);
     Router::redirect("/spotList");
 });
 
 Router::route_auth("POST", "/spot/update", $authFunction, function (){
-    $id = $_POST["id"];
-    $name = $_POST["name"];
-    $address = $_POST["address"];
-    $latitude = $_POST["latitude"];
-    $longitude = $_POST["longitude"];
-    $category = $_POST["category"];
-    $comment = $_POST["comment"];
-
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-        UPDATE spot SET name = :name,
-            address = :address,
-            lat = :lat,
-            lng = :lng,
-            category = :category,
-            scomment = :scomment
-        WHERE id =:id');
-    $stmt->bindValue(':name', "$name");
-    $stmt->bindValue(':address', $address);
-    $stmt->bindValue(':lat', $latitude);
-    $stmt->bindValue(':lng', $longitude);
-    $stmt->bindValue(':category', $category);
-    $stmt->bindValue(':scomment', $comment);
-    $stmt->bindValue(':id', $id);
-    $stmt->execute();
-
+    $spotDAO = new SpotDAO();
+    $spot = new Spot();
+    $spot->setId($_POST["id"]);
+    $spot->setName($_POST["name"]);
+    $spot->setAddress($_POST["address"]);
+    $spot->setLat($_POST["latitude"]);
+    $spot->setLng($_POST["longitude"]);
+    $spot->setCategory($_POST["category"]);
+    $spot->setComment($_POST["comment"]);
+    $spotDAO->update($spot);
     Router::redirect("/spotList");
 });
 
+//TODO Role implementation that only elevated users or creator are able to edit or delete
 Router::route_auth("GET", "/spotList", $authFunction, function (){
-    $pdoInstance = Database::connect();
-    $stmt = $pdoInstance->prepare('
-        SELECT spot.id, lat, lng, name, address, category, username FROM spot INNER JOIN customer ON customer.id = spot.userid ORDER BY id;
-        ');
-    // $stmt->bindValue(':uid', $_SESSION["userLogin"]["id"]);
-    $stmt->execute();
+    $spotDAO = new SpotDAO();
     global $spots;
-    $spots = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $spots = $spotDAO->listAllSpots();
     layoutSetContent("spotList.php");
 });
 
