@@ -22,6 +22,13 @@ class SpotController
         LayoutRendering::basicLayout($contentView);
     }
 
+    public static function display(){
+        $id = $_GET["id"];
+        $contentView = new TemplateView("spot.php");
+        $contentView->spot = (new SpotDAO())->read($id);
+        LayoutRendering::basicLayout($contentView);
+    }
+
     public static function create(){
         $spotDAO = new SpotDAO();
         $spot = new Spot();

@@ -26,8 +26,6 @@ use controller\AuthController;
 
 session_start();
 
-
-
 $authFunction = function () {
     if (AuthController::authenticate()) {
         return true;
@@ -37,7 +35,8 @@ $authFunction = function () {
 };
 
 Router::route_auth("GET", "/", $authFunction, function () {
-    CustomerController::readAll();
+    SpotController::listAllSpots();
+
 });
 
 Router::route("GET", "/login", function () {
@@ -63,9 +62,14 @@ Router::route("GET", "/logout", function () {
     Router::redirect("/login");
 });
 
+//TODO Role implementation that only elevated users or creator are able to edit or delete
+Router::route_auth("GET", "/userList", $authFunction, function (){
+    CustomerController::readAll();
+});
+
 Router::route_auth("GET", "/user/delete", $authFunction, function (){
     CustomerController::delete();
-    Router::redirect("/");
+    Router::redirect("/userList");
 });
 
 Router::route_auth("GET", "/user/edit", $authFunction, function (){
@@ -74,12 +78,12 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
 
 Router::route_auth("POST", "/user/update", $authFunction, function (){
     CustomerController::update();
-    Router::redirect("/");
+    Router::redirect("/userList");
 });
 
 Router::route("POST", "/addSpot", function () {
     SpotController::create();
-    Router::redirect("/spotList");
+    Router::redirect("/");
 });
 
 Router::route_auth("GET", "/addSpot", $authFunction, function (){
@@ -90,21 +94,22 @@ Router::route_auth("GET", "/spot/edit", $authFunction, function (){
     SpotController::edit();
 });
 
+Router::route_auth("GET", "/spot/display", $authFunction, function (){
+    SpotController::display();
+});
+
 //TODO implement check if user is allowed to do this
 Router::route_auth("GET", "/spot/delete", $authFunction, function (){
     SpotController::delete();
-    Router::redirect("/spotList");
+    Router::redirect("/");
 });
 
 Router::route_auth("POST", "/spot/update", $authFunction, function (){
     SpotController::udpate();
-    Router::redirect("/spotList");
+    Router::redirect("/");
 });
 
-//TODO Role implementation that only elevated users or creator are able to edit or delete
-Router::route_auth("GET", "/spotList", $authFunction, function (){
-    SpotController::listAllSpots();
-});
+
 
 try {
     Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
