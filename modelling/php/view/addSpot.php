@@ -6,10 +6,12 @@
  * Time: 22:08
  */
 use config\Config;
-
 ?>
 <div class="container spot-container">
-    <form id="spot" method="post" action="addSpot">
+    <form id="spot" method="post" action="spot/update">
+        <div class="form-row" style="margin-top: 0px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input id="name" class="form-control" type="hidden" name="id" value=""></div>
+        </div>
         <div class="form-row" style="margin-top: 0px;">
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Spot Name<input id="name" class="form-control" type="text" name="name" required="" placeholder="Awesome Spot XYZ"></div>
         </div>

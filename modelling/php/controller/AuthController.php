@@ -10,18 +10,26 @@ namespace controller;
 
 use dao\CustomerDAO;
 use domain\Customer;
+use services\AuthServiceImpl;
 
 class AuthController
 {
     public static function authenticate(){
         if (isset($_SESSION["userLogin"])) {
-            return true;
+            if(AuthServiceImpl::getInstance()->validateToken($_SESSION["userLogin"]["token"]))
+                return true;
         }
         return false;
     }
 
     public static function login(){
-        $email = $_POST["email"];
+        $authService = AuthServiceImpl::getInstance();
+        if($authService->verfiyCustomer($_POST["email"], $_POST["password"])) {
+            session_regenerate_id(true);
+            $_SESSION["userLogin"]["token"] = $authService->issueToken();
+        }
+
+        /*$email = $_POST["email"];
         $customerDAO = new CustomerDAO();
         $customer = $customerDAO->findByEmail($email);
         if (isset($customer)) {
@@ -37,6 +45,6 @@ class AuthController
                     $customerDAO->update($customer);
                 }
             }
-        }
+        }*/
     }
 }

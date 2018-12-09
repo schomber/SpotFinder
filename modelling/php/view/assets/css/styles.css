@@ -21,17 +21,10 @@
 }
 
 .spotContainer:hover {
-    background-color: #FFC600;
+    box-shadow: 0 0 30px rgb(255,198,0);
 }
 
-.whatsapp {
-    background-image: url("../img/WhatsApp.png") ;
-    background-repeat: no-repeat;
-    width: 63px;
-    height: 60px
+.whatsapp:hover {
+    box-shadow: 0 0 30px rgb(255,198,0);
 }
 
-.whatsapp a{
-    text-decoration: none;
-
-}

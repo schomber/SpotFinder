@@ -23,17 +23,18 @@
     </nav>
 </div>
 <div class="login-clean">
-    <form method="post">
+    <form name="form" method="post">
         <h2 class="sr-only">Login Form</h2>
         <div class="illustration"><i class="icon ion-social-android-outline"></i></div>
         <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
         <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="ValidateEmail(document.form.email)">Log In</button></div>
     </form>
 </div>
 <div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="register">Register</a></div>
+
+<script src="assets/js/custom.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

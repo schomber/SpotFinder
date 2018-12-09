@@ -27,7 +27,7 @@
                     <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/addSpot"><i class="fa fa-plus"></i>&nbsp;Spot</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/">Find Spot</a></li>
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="editMyUser.html">MyProfile</a>
-                        <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"] . "/user/edit?id=" . $_SESSION["userLogin"]["id"]?>">Edit</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/userList">UserList</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/logout">Logout</a></div>
+                        <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"] . "/user/edit?id=" . $_SESSION["userLogin"]["token"]?>">Edit</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/userList">UserList</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/logout">Logout</a></div>
                     </li>
                 </ul>
             </div>

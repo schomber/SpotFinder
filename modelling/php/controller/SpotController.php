@@ -8,64 +8,59 @@
 
 namespace controller;
 
-use dao\SpotDAO;
 use domain\Spot;
+use services\SpotServiceImpl;
 use view\LayoutRendering;
 use view\TemplateView;
 
 class SpotController
 {
+
     public static function edit(){
         $id = $_GET["id"];
-        $contentView = new TemplateView("editSpot.php");
-        $contentView->spot = (new SpotDAO())->read($id);
-        LayoutRendering::basicLayout($contentView);
+        $view = new TemplateView("editSpot.php");
+        $view->spot = (new SpotServiceImpl())->readSpot($id);
+        LayoutRendering::basicLayout($view);
     }
 
     public static function display(){
-        $id = $_GET["id"];
         $contentView = new TemplateView("spot.php");
-        $contentView->spot = (new SpotDAO())->read($id);
+        $contentView->spot = (new SpotServiceImpl())->readSpot($_GET["id"]);
         LayoutRendering::basicLayout($contentView);
     }
 
-    public static function create(){
-        $spotDAO = new SpotDAO();
-        $spot = new Spot();
-        $spot->setName($_POST["name"]);
-        $spot->setLat($_POST["latitude"]);
-        $spot->setLng($_POST["longitude"]);
-        $spot->setAddress($_POST["address"]);
-        $spot->setCategory($_POST["category"]);
-        $spot->setComment($_POST["comment"]);
-        $spot->setUserid($_SESSION["userLogin"]["id"]);
-        $spotDAO->create($spot);
-    }
-
-    public static function udpate(){
-        $spotDAO = new SpotDAO();
+    public static function update(){
         $spot = new Spot();
         $spot->setId($_POST["id"]);
         $spot->setName($_POST["name"]);
-        $spot->setAddress($_POST["address"]);
         $spot->setLat($_POST["latitude"]);
         $spot->setLng($_POST["longitude"]);
+        $spot->setAddress($_POST["address"]);
         $spot->setCategory($_POST["category"]);
-        $spot->setComment($_POST["comment"]);
-        $spotDAO->update($spot);
+        $spot->setScomment($_POST["comment"]);
+
+        if ($spot->getId() === "") {
+            (new SpotServiceImpl())->createSpot($spot);
+        } else {
+
+            (new SpotServiceImpl())->updateSpot($spot);
+        }
+    }
+
+    public static function create(){
+        $contentView = new TemplateView("addSpot.php");
+        LayoutRendering::basicLayout($contentView);
     }
 
     public static function delete(){
         $id = $_GET["id"];
-        $spotDAO = new SpotDAO();
-        $spot = new Spot();
-        $spot->setId($id);
-        $spotDAO->delete($spot);
+        (new SpotServiceImpl())->deleteSpot($id);
+
     }
 
     public static function listAllSpots(){
         $contentView = new TemplateView("spotList.php");
-        $contentView->spots = (new SpotDAO())->listAllSpots();
+        $contentView->spots = (new SpotServiceImpl())->listAllSpots();
         LayoutRendering::basicLayout($contentView);
     }
 

@@ -23,7 +23,7 @@ class SpotDAO extends BasicDAO
         $stmt->bindValue(':name', $spot->getName());
         $stmt->bindValue(':address', $spot->getAddress());
         $stmt->bindValue(':category', $spot->getCategory());
-        $stmt->bindValue(':scomment', $spot->getComment());
+        $stmt->bindValue(':scomment', $spot->getScomment());
         $stmt->bindValue(':userid', $spot->getUserid());
         $stmt->execute();
         return $this->read($this->pdoInstance->lastInsertId());
@@ -55,7 +55,7 @@ class SpotDAO extends BasicDAO
         $stmt->bindValue(':lat', $spot->getLat());
         $stmt->bindValue(':lng', $spot->getLng());
         $stmt->bindValue(':category', $spot->getCategory());
-        $stmt->bindValue(':scomment', $spot->getComment());
+        $stmt->bindValue(':scomment', $spot->getScomment());
         $stmt->bindValue(':id', $spot->getId());
         $stmt->execute();
         return $this->read($spot->getId());

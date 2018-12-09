@@ -9,6 +9,7 @@
 namespace controller;
 
 use dao\CustomerDAO;
+use services\AuthServiceImpl;
 use view\LayoutRendering;
 use view\TemplateView;
 use domain\Customer;
@@ -16,13 +17,21 @@ use domain\Customer;
 class CustomerController
 {
     public static function edit(){
+        $view = new TemplateView("editUser.php");
+        $view->customer = AuthServiceImpl::getInstance()->readCustomer();
+        LayoutRendering::basicLayout($view);
+    }
+
+    //TODO implement amdin Priv so all users can be edited
+    public static function adminEdit(){
         $id = $_GET["id"];
         $contentView = new TemplateView("editUser.php");
         $contentView->customer = (new CustomerDAO())->read($id);
         LayoutRendering::basicLayout($contentView);
     }
 
-    public static function delete(){
+    //TODO implement amdin Priv so all users can be edited
+    public static function adminDelete(){
         $id = $_GET["id"];
         $customerDAO = new CustomerDAO();
         $customer = new Customer();
@@ -32,6 +41,7 @@ class CustomerController
         }
     }
 
+    //TODO implement amdin Priv so all users can be edited
     public static function readAll(){
         $contentView = new TemplateView("userList.php");
         $contentView->customers = (new CustomerDAO())->listAll();
@@ -39,6 +49,8 @@ class CustomerController
     }
 
     public static function update(){
+        AuthServiceImpl::getInstance()->editCustomer($_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
+        /*
         $customerDAO = new CustomerDAO();
         $customer = new Customer();
 
@@ -56,18 +68,19 @@ class CustomerController
             $customer->setSurname($_POST["surname"]);
             $customer->setEmail($_POST["email"]);
             $customerDAO->update($customer);
-        }
+        }*/
     }
 
     public static function register() {
-        $customer = new Customer();
+        AuthServiceImpl::getInstance()->editCustomer($_POST["firstname"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
+        /* $customer = new Customer();
         $customer->setUsername($_POST['username']);
         $customer->setFirstname($_POST['firstname']);
         $customer->setSurname($_POST["surname"]);
         $customer->setEmail($_POST["email"]);
         $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
         $customerDAO = new CustomerDAO();
-        $customerDAO->create($customer);
+        $customerDAO->create($customer);*/
     }
 
     public static function registerView(){

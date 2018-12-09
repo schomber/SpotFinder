@@ -40,6 +40,18 @@ class Config
             self::$config["database.user"] = $dbopts["user"];
             self::$config["database.password"] = $dbopts["pass"];
         }
+        if (isset($_ENV["GOOGLE_APIKEY"])) {
+            self::$config["google.apikey"] = $_ENV["GOOGLE_APIKEY"];
+        }
+        if (isset($_ENV["HYPDF_USER"])) {
+            self::$config["pdf.hypdf-user"] = $_ENV["HYPDF_USER"];
+        }
+        if (isset($_ENV["HYPDF_PASSWORD"])) {
+            self::$config["pdf.hypdf-password"] = $_ENV["HYPDF_PASSWORD"];
+        }
+        if (isset($_ENV["SENDGRID_APIKEY"])) {
+            self::$config["email.sendgrid-apikey"] = $_ENV["SENDGRID_APIKEY"];
+        }
     }
 
 }

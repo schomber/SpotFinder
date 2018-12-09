@@ -6,7 +6,11 @@
  * Time: 22:09
  */
 use view\TemplateView;
-$this->customer;
+use domain\Customer;
+
+isset($this->customer) ? $customer = $this->customer : $customer = new Customer();
+
+//$this->customer;
 ?>
 <div class="login-clean">
     <form method="post" action="update">

@@ -8,6 +8,8 @@
 
 use config\Config;
 use view\TemplateView;
+use services\AuthServiceImpl;
+
 ?>
 <div class="container list-header spotLink" style="margin-top: 0;"><h1 class="text-center">SpotFinder</h1>
     <div class="row">
@@ -17,7 +19,7 @@ use view\TemplateView;
     </div>
 
     <?php
-    foreach ($this->spots as $spot): ?>
+    foreach ($this->spots as $spot):?>
     <a href="<?php echo $GLOBALS["ROOT_URL"] . "/spot/display?id=" . $spot->getId()?>" style="display: block">
         <div class="row spotContainer" style="padding-top: 20px;padding-bottom: 5px;">
             <div class="col">
@@ -37,7 +39,7 @@ use view\TemplateView;
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th class="text-center"><?php echo "#" . $spot->getId()?></th>
+                                    <th class="text-center">Information</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -59,32 +61,30 @@ use view\TemplateView;
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">SpotFinder: <?php echo TemplateView::noHTML($spot->getUsername())?></th>
+                                    <th class="text-center">Action & Share</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">Share via Whatsapp</a>
-
-                                    <td class="text-center">
-                                        <div class="btn-group" role="group">
-                                            <a href="spot/edit?id=<?php echo $spot->getId() ?>" class="btn btn-info" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</a>
-                                            <a href="spot/delete?id=<?php echo $spot->getId() ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><button class="btn btn-light" type="button" style="width: 160px;height: 50px;"><i class="fa fa-file-pdf-o border-success" style="color: rgb(220,53,69);height: px;font-size: 25px;"></i>&nbsp;PDF</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">
-                                        <button class="btn btn-light whatsapp" type="button">
-                                            <a href="whatsapp://send?text=
-                                            <?php echo  $spot->getUsername(). " wants to share a " . $spot->getCategory() . " spot in" . $spot->getAddress() . " with you" ?>"
-                                               data-action="<?php echo $GLOBALS["ROOT_URL"] . "/spot/display?id=" . $spot->getId()?>"></a>
-                                        </button>
-                                    </td>
-                                </tr>
+                                <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() == $spot->getUserid()) {?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a href="spot/edit?id=<?php echo $spot->getId() ?>" class="btn btn-light" type="button"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                                                <a href="spot/delete?id=<?php echo $spot->getId() ?>" class="btn btn-danger" type="button"><i class="fa fa-remove"></i>&nbsp;Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a href="spot/pdf?id=<?php echo $spot->getId() ?>" class="whatsapp btn " type="button"><i class="fa fa-file-pdf-o border-success" style="color: rgb(220,53,69);font-size: 25px; padding-top: 10px"></i>&nbsp;PDF</a>
+                                                <a class="whatsapp" target="_blank" type="button" href="https://wa.me/?text=<?php echo urlencode($GLOBALS["ROOT_URL"] . "/spot/display?id=" . $spot->getId())?>" data-action="share/whatsapp/share">
+                                                    <img src="assets/img/WhatsApp.png" width="60" height="60">
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

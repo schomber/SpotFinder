@@ -17,7 +17,7 @@ class Spot
     private $name;
     private $address;
     private $category;
-    private $comment;
+    private $scomment;
     private $userid;
 
     private $username;
@@ -122,17 +122,17 @@ class Spot
     /**
      * @return string
      */
-    public function getComment()
+    public function getScomment()
     {
-        return $this->comment;
+        return $this->scomment;
     }
 
     /**
      * @param string
      */
-    public function setComment($comment)
+    public function setScomment($scomment)
     {
-        $this->comment = $comment;
+        $this->scomment = $scomment;
     }
 
     /**

@@ -8,6 +8,7 @@
 
 namespace view;
 
+use services\PDFServiceClient;
 
 class LayoutRendering
 {

@@ -124,8 +124,6 @@
   margin: 0px auto;
 }
 
-heading-table {
-}
 
 .map {
 }
@@ -157,8 +155,10 @@ heading-table {
 }
 
 .row.spotContainer {
-  box-shadow: 0 5px 0px rgb(255,198,0);
+  box-shadow: 0 1px 0px rgba(255,198, 0, 0.7);
 }
+
+
 
 .text-center {
 }

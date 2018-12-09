@@ -10,19 +10,13 @@
 require_once("config/Autoloader.php");
 
 use router\Router;
-use database\Database;
 use http\HTTPException;
-use domain\Customer;
-use domain\Spot;
-use domain\Role;
-use dao\CustomerDAO;
-use dao\SpotDAO;
-use dao\RoleDAO;
-use view\TemplateView;
 use controller\CustomerController;
 use controller\SpotController;
+use controller\PDFController;
 use controller\RoleController;
 use controller\AuthController;
+use services\AuthServiceImpl;
 
 session_start();
 
@@ -68,7 +62,7 @@ Router::route_auth("GET", "/userList", $authFunction, function (){
 });
 
 Router::route_auth("GET", "/user/delete", $authFunction, function (){
-    CustomerController::delete();
+    //CustomerController::delete();
     Router::redirect("/userList");
 });
 
@@ -82,12 +76,12 @@ Router::route_auth("POST", "/user/update", $authFunction, function (){
 });
 
 Router::route("POST", "/addSpot", function () {
-    SpotController::create();
+    SpotController::update();
     Router::redirect("/");
 });
 
 Router::route_auth("GET", "/addSpot", $authFunction, function (){
-    SpotController::addSpotView();
+    SpotController::create();
 });
 
 Router::route_auth("GET", "/spot/edit", $authFunction, function (){
@@ -98,6 +92,10 @@ Router::route_auth("GET", "/spot/display", $authFunction, function (){
     SpotController::display();
 });
 
+Router::route_auth("GET", "/spot/pdf", $authFunction, function (){
+    PDFController::generatePDFSpot();
+});
+
 //TODO implement check if user is allowed to do this
 Router::route_auth("GET", "/spot/delete", $authFunction, function (){
     SpotController::delete();
@@ -105,11 +103,9 @@ Router::route_auth("GET", "/spot/delete", $authFunction, function (){
 });
 
 Router::route_auth("POST", "/spot/update", $authFunction, function (){
-    SpotController::udpate();
+    SpotController::update();
     Router::redirect("/");
 });
-
-
 
 try {
     Router::call_route($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
