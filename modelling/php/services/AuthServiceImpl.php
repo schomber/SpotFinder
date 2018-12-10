@@ -8,6 +8,8 @@
 
 namespace services;
 
+use dao\AuthDAO;
+use domain\AuthToken;
 use domain\Customer;
 use dao\CustomerDAO;
 use http\HTTPException;
@@ -157,14 +159,42 @@ class AuthServiceImpl implements AuthService
 
     public function validateToken($token) {
         $tokenArray = explode(":", $token);
+        $authTokenDAO = new AuthDAO();
+        $authToken = $authTokenDAO->findBySelector($tokenArray[0]);
+        if (!empty($authToken)) {
+            if(time()<=(new \DateTime($authToken->getExpiration()))->getTimestamp()) {
+                if(hash_equals(hash('sha384', hex2bin($tokenArray[1])), $authToken->getValidator())) {
+                    $this->currentCustomerId = $authToken->getUserid();
+                    return true;
+                }
+            }
+            $authTokenDAO->delete($authToken);
+        }
+        return false;
+
+        /*
+        $tokenArray = explode(":", $token);
         if(count($tokenArray)>1) {
             $this->currentCustomerId = $tokenArray[0];
             return true;
         }
         return false;
+        */
     }
 
     public function issueToken($type = self::CUST_TOKEN, $email = null){
-        return $this->currentCustomerId . ":" . bin2hex(random_bytes(20));
+        $token = new AuthToken();
+        $token->setSelector(bin2hex(random_bytes(5)));
+        $token->setAtype(self::CUST_TOKEN);
+        $token->setUserid($this->currentCustomerId);
+        $timestamp = (new \DateTime('now'))->modify('+30 days');
+        $token->setExpiration($timestamp->format("Y-m-d H:1:s"));
+        $validator = random_bytes(20);
+        $token->setValidator(hash('sha384', $validator));
+        $authTokenDAO = new AuthDAO();
+        $authTokenDAO->create($token);
+        return $token->getSelector() .":". bin2hex($validator);
+
+        //return $this->currentCustomerId . ":" . bin2hex(random_bytes(20));
     }
 }

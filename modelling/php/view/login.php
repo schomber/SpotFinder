@@ -29,6 +29,12 @@
         <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
         <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
         <div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="ValidateEmail(document.form.email)">Log In</button></div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label class="control-label">
+                    <input type="checkbox" name="remember" /> Remember me for 30 days</label>
+            </div>
+        </div>
     </form>
 </div>
 <div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="register">Register</a></div>

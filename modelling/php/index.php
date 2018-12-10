@@ -52,7 +52,7 @@ Router::route("POST", "/register", function () {
 });
 
 Router::route("GET", "/logout", function () {
-    session_destroy();
+    AuthController::logout();
     Router::redirect("/login");
 });
 
