@@ -7,11 +7,16 @@
  */
 use view\TemplateView;
 use domain\Customer;
+use services\AuthServiceImpl;
 
 isset($this->customer) ? $customer = $this->customer : $customer = new Customer();
-
 //$this->customer;
 ?>
+<div style="text-align: center; width: 100%;">
+    <?php if (AuthServiceImpl::getInstance()->verifyAdminExists()) {?>
+    <a class="adminButton btn" type="button" href="role/createAdmin?id=<?php echo $customer->getID() ?>" >Create Admin</a>
+    <?php } ?>
+</div>
 <div class="login-clean">
     <form method="post" action="update">
         <h2 class="sr-only">Login Form</h2>

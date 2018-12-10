@@ -14,6 +14,24 @@ class Role
     private $id;
     private $role;
 
+    private $roles;
+
+    /**
+     * @return mixed
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param mixed $roles
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+    }
+
     /**
      * @return int
      */

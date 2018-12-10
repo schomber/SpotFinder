@@ -56,7 +56,6 @@ Router::route("GET", "/logout", function () {
     Router::redirect("/login");
 });
 
-//TODO Role implementation that only elevated users or creator are able to edit or delete
 Router::route_auth("GET", "/userList", $authFunction, function (){
     CustomerController::readAll();
 });
@@ -99,6 +98,11 @@ Router::route_auth("GET", "/spot/pdf", $authFunction, function (){
 //TODO implement check if user is allowed to do this
 Router::route_auth("GET", "/spot/delete", $authFunction, function (){
     SpotController::delete();
+    Router::redirect("/");
+});
+
+Router::route_auth("GET", "/user/role/createAdmin", $authFunction, function (){
+    RoleController::create();
     Router::redirect("/");
 });
 

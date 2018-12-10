@@ -23,15 +23,7 @@ class CustomerController
     }
 
     //TODO implement amdin Priv so all users can be edited
-    public static function adminEdit(){
-        $id = $_GET["id"];
-        $contentView = new TemplateView("editUser.php");
-        $contentView->customer = (new CustomerDAO())->read($id);
-        LayoutRendering::basicLayout($contentView);
-    }
-
-    //TODO implement amdin Priv so all users can be edited
-    public static function adminDelete(){
+    public static function delete(){
         $id = $_GET["id"];
         $customerDAO = new CustomerDAO();
         $customer = new Customer();
@@ -44,43 +36,17 @@ class CustomerController
     //TODO implement amdin Priv so all users can be edited
     public static function readAll(){
         $contentView = new TemplateView("userList.php");
-        $contentView->customers = (new CustomerDAO())->listAll();
+        $contentView->customers = AuthServiceImpl::getInstance()->listAllUser();
         LayoutRendering::basicLayout($contentView);
     }
 
     public static function update(){
         AuthServiceImpl::getInstance()->editCustomer($_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
-        /*
-        $customerDAO = new CustomerDAO();
-        $customer = new Customer();
-
-        $id = $_POST["id"];
-        if ($id === "") {
-            $customer->setUsername($_POST['username']);
-            $customer->setFirstname($_POST['firstname']);
-            $customer->setSurname($_POST["surname"]);
-            $customer->setEmail($_POST["email"]);
-            $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
-            $customerDAO->create($customer);
-        } else {
-            $customer->setId($id);
-            $customer->setFirstname($_POST['firstname']);
-            $customer->setSurname($_POST["surname"]);
-            $customer->setEmail($_POST["email"]);
-            $customerDAO->update($customer);
-        }*/
     }
 
     public static function register() {
-        AuthServiceImpl::getInstance()->editCustomer($_POST["firstname"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
-        /* $customer = new Customer();
-        $customer->setUsername($_POST['username']);
-        $customer->setFirstname($_POST['firstname']);
-        $customer->setSurname($_POST["surname"]);
-        $customer->setEmail($_POST["email"]);
-        $customer->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
-        $customerDAO = new CustomerDAO();
-        $customerDAO->create($customer);*/
+        AuthServiceImpl::getInstance()->editCustomer($_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
+
     }
 
     public static function registerView(){

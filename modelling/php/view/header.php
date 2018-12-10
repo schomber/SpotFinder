@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+<?php use services\AuthServiceImpl; ?>
 <div>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean">
         <div class="container"><a class="navbar-brand" href="<?php echo $GLOBALS["ROOT_URL"]; ?>"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
@@ -27,7 +27,12 @@
                     <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/addSpot"><i class="fa fa-plus"></i>&nbsp;Spot</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/">Find Spot</a></li>
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="editMyUser.html">MyProfile</a>
-                        <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"] . "/user/edit?id=" . $_SESSION["userLogin"]["token"]?>">Edit</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/userList">UserList</a><a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/logout">Logout</a></div>
+                        <div class="dropdown-menu" role="menu">
+                            <a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"] . "/user/edit?id=" . AuthServiceImpl::getInstance()->getCurrentCustomerId()?>">Edit</a>
+                            <?php if (AuthServiceImpl::getInstance()->verfiyAdmin()) {?>
+                                <a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/userList">UserList</a>
+                            <?php } ?>
+                            <a class="dropdown-item" role="presentation" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/logout">Logout</a></div>
                     </li>
                 </ul>
             </div>

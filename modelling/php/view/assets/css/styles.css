@@ -28,3 +28,11 @@
     box-shadow: 0 0 30px rgb(255,198,0);
 }
 
+.adminButton {
+color: black;
+}
+
+.adminButton:hover {
+    box-shadow: 0 0 30px rgb(255,198,0);
+}
+

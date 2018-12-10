@@ -1,15 +1,9 @@
 TODO Liste Webseite
 
-- (1)AuthService for Spot Post (jeder User soll nur seine Eintràge löschen und ändern können)
-
-
-Admin Role implementieren -> so das dieser User die übersicht hat über alle Benutzer / Management + Spots
-Add Admins Role to users -> UserList
-
 Step 12 --> zuerst muss der rest klappen
 Step 13 --> zuerst muss der rest klappen
 
-
 ADDON (nur wenn no lust do isch ...)
+- Admins setzen ->lowest PRIO
 - Search to find Spots
 - only show 5 Spots per page -> load new if scroll

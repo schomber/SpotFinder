@@ -44,7 +44,9 @@ class AuthServiceImpl implements AuthService
         return $this->currentCustomerId;
     }
 
-
+    /**
+     * Customer AREA
+     */
 
     public function verfiyCustomer($email, $password)
     {
@@ -67,7 +69,10 @@ class AuthServiceImpl implements AuthService
     {
         if($this->verifyAuth()) {
             $customerDAO = new CustomerDAO();
-            return $customerDAO->read($this->currentCustomerId);
+            if(($this->getCurrentCustomerId() == $customerDAO->read($_GET['id'])->getId()) || $this->verfiyAdmin()){
+                return $customerDAO->read($_GET['id']);
+            }
+            throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
         }
         throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
     }
@@ -75,6 +80,7 @@ class AuthServiceImpl implements AuthService
     public function editCustomer($username, $firstname,$surname, $email, $password)
     {
         $customer = new Customer();
+        $customer->setId($_POST['id']);
         $customer->setUsername($username);
         $customer->setFirstname($firstname);
         $customer->setSurname($surname);
@@ -82,13 +88,16 @@ class AuthServiceImpl implements AuthService
         $customer->setPassword(password_hash($password, PASSWORD_DEFAULT));
         $customerDAO = new CustomerDAO();
         if($this->verifyAuth()) {
-            $customer->setId($this->currentCustomerId);
-            if($customerDAO->read($this->currentCustomerId)->getEmail() !== $customer->getEmail()) {
+            if(($customerDAO->read($this->currentCustomerId)->getId() == $customer->getId()) || $this->verfiyAdmin()) {
+                $customerDAO->update($customer);
+                return true;
+            }
+            else {
                 if(!is_null($customerDAO->findByEmail($email))) {
                     return false;
                 }
-            } $customerDAO->update($customer);
-                return true;
+            }
+
         } else {
             if(!is_null($customerDAO->findByEmail($email))) {
                 return false;
@@ -97,6 +106,54 @@ class AuthServiceImpl implements AuthService
             return true;
         }
     }
+
+    public function listAllUser(){
+        $customerDAO = new CustomerDAO();
+        if ($this->verifyAuth() && $this->verfiyAdmin()){
+            return $customerDAO->listAll();
+        }
+        return null;
+    }
+
+    public function elevate($id){
+        if($this->verifyAuth()){
+            $customer = new Customer();
+            $customer->setId($id);
+            $customerDAO = new CustomerDAO();
+            if(((is_null($customerDAO->read($id)->getRoleid()) && $this->verifyAdminExists()) || $this->verfiyAdmin())) {
+                $customerDAO->elevate($customer);
+            }
+        }
+    }
+
+    /**
+     * ADMIN AREA
+     */
+
+    public function verfiyAdmin()
+    {
+        if ($this->verifyAuth()) {
+            $customerDAO = new CustomerDAO();
+            if ($customerDAO->read($this->getCurrentCustomerId())->getRoleid() == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function verifyAdminExists(){
+        $customerDAO = new CustomerDAO();
+        foreach ($customerDAO->listAll() as $customer) {
+            if(!is_null($customer->getRoleid())) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    /**
+     * AUTH TOKEN AREA
+     */
 
     public function validateToken($token) {
         $tokenArray = explode(":", $token);

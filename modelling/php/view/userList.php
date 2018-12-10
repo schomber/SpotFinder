@@ -17,6 +17,7 @@ use view\TemplateView;
                 <th>USER</th>
                 <th>NAME</th>
                 <th>EMAIL</th>
+                <th>Admin</th>
                 <th>ACTION</th>
             </tr>
             </thead>
@@ -28,6 +29,7 @@ use view\TemplateView;
                     <td><?php echo TemplateView::noHTML($customer->getUsername()); ?></td>
                     <td><?php echo TemplateView::noHTML($customer->getFirstname() ." ". $customer->getSurname()); ?></td>
                     <td><?php echo TemplateView::noHTML($customer->getEmail()) ?></td>
+                    <td><?php echo $customer->getRoleid(); ?></td>
                     <td>
                         <div class="btn-group" role="group">
                             <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">

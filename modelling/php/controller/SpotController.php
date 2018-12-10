@@ -38,6 +38,7 @@ class SpotController
         $spot->setAddress($_POST["address"]);
         $spot->setCategory($_POST["category"]);
         $spot->setScomment($_POST["comment"]);
+        $spot->setUserid($_POST['userid']);
 
         if ($spot->getId() === "") {
             (new SpotServiceImpl())->createSpot($spot);

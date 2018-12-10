@@ -65,7 +65,7 @@ use services\AuthServiceImpl;
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() == $spot->getUserid()) {?>
+                                <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() == $spot->getUserid() || AuthServiceImpl::getInstance()->verfiyAdmin()) {?>
                                     <tr>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">

@@ -8,8 +8,16 @@
 
 namespace controller;
 
+use services\RoleServiceImpl;
+use services\AuthServiceImpl;
 
 class RoleController
 {
+    public static function create() {
+        (new RoleServiceImpl())->createAdminRole();
+        AuthServiceImpl::getInstance()->elevate($_GET["id"]);
+
+    }
+
 
 }

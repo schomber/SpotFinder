@@ -17,6 +17,9 @@ isset($this->spot) ? $spot = $this->spot : $spot = new Spot();
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input id="name" class="form-control" type="hidden" name="id" required="" value="<?php echo $spot->getId() ?>"></div>
         </div>
         <div class="form-row" style="margin-top: 0px;">
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4"><input id="name" class="form-control" type="hidden" name="userid" required="" value="<?php echo $spot->getUserid() ?>"></div>
+        </div>
+        <div class="form-row" style="margin-top: 0px;">
             <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Spot Name<input id="name" class="form-control" type="text" name="name" required="" placeholder="Awesome Spot XYZ" value="<?php echo TemplateView::noHTML($spot->getName()); ?>"></div>
         </div>
         <div class="form-row fadeElement" style="margin-top: 20px;">

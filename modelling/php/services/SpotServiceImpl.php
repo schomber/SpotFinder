@@ -13,7 +13,6 @@ use dao\SpotDAO;
 use domain\Spot;
 use http\HTTPException;
 use http\HTTPStatusCode;
-use services\AuthServiceImpl;
 
 class SpotServiceImpl implements SpotService
 {
@@ -30,7 +29,8 @@ class SpotServiceImpl implements SpotService
 
     public function readSpot($spotId)
     {
-        if(AuthServiceImpl::getInstance()->verifyAuth()) {
+        $spotDAO = new SpotDAO();
+        if(AuthServiceImpl::getInstance()->verifyAuth() && (!is_null($spotDAO->read($spotId)))) {
             $spotDAO = new SpotDAO();
             return $spotDAO->read($spotId);
         }
@@ -40,10 +40,13 @@ class SpotServiceImpl implements SpotService
     public function updateSpot(Spot $spot)
     {
         if(AuthServiceImpl::getInstance()->verifyAuth()) {
-            $spotDAO = new SpotDAO();
-            return $spotDAO->update($spot);
+            if(AuthServiceImpl::getInstance()->getCurrentCustomerId() == $spot->getUserid() || AuthServiceImpl::getInstance()->verfiyAdmin()) {
+                $spotDAO = new SpotDAO();
+                return $spotDAO->update($spot);
+            }
+        } else {
+            throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
         }
-        throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
     }
 
     public function deleteSpot($spotId)
@@ -51,8 +54,15 @@ class SpotServiceImpl implements SpotService
         if(AuthServiceImpl::getInstance()->verifyAuth()) {
             $spotDAO = new SpotDAO();
             $spot = new Spot();
-            $spot->setId($spotId);
-            $spotDAO->delete($spot);
+            $spot->setUserid($spotDAO->read($spotId)->getUserid());
+            if(AuthServiceImpl::getInstance()->getCurrentCustomerId() == $spot->getUserid() || AuthServiceImpl::getInstance()->verfiyAdmin()) {
+                $spotDAO = new SpotDAO();
+                $spot = new Spot();
+                $spot->setId($spotId);
+                $spotDAO->delete($spot);
+            }
+        } else {
+            throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
         }
     }
 

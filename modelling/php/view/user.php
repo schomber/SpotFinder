@@ -23,8 +23,8 @@
     <form method="post">
         <h2 class="sr-only">Login Form</h2>
         <div class="illustration"><i class="icon ion-edit"></i></div>
-        <div class="form-group blocked"><input class="form-control" type="text" name="ID" disabled="" placeholder="ID"></div>
-        <div class="form-group blocked"><input class="form-control" type="text" name="username" disabled="" placeholder="Username"></div>
+        <div class="form-group blocked"><input class="form-control" type="text" name="ID" readonly placeholder="ID"></div>
+        <div class="form-group blocked"><input class="form-control" type="text" name="username"  placeholder="Username"></div>
         <div class="form-group"><input class="form-control" type="text" name="firstname" placeholder="First Name"></div>
         <div class="form-group"><input class="form-control" type="text" name="surname" placeholder="Surname"></div>
         <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>

@@ -90,9 +90,9 @@ class CustomerDAO extends BasicDAO
         $stmt = $this->pdoInstance->prepare('
                 UPDATE customer SET roleid=:roleid WHERE id = :id;');
         $stmt->bindValue(':id', $customer->getId());
-        $stmt->bindValue(':roleid', $customer->getRoleid());
+        $stmt->bindValue(':roleid', 1);
         $stmt->execute();
-        return $this->read($customer->getId());
+        return null;
     }
 
     //TODO add if needed some additional search logic for customers

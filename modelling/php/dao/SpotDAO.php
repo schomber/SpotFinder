@@ -32,7 +32,8 @@ class SpotDAO extends BasicDAO
     //TODO if not possible to solve with OOP approach, plan to do a JOIN between Spot and Customer
     public function read($spotId) {
         $stmt = $this->pdoInstance->prepare('
-            SELECT * FROM spot WHERE id = :id;');
+        SELECT spot.id, lat, lng, name, address, category, userid, username FROM spot INNER JOIN customer ON customer.id = spot.userid WHERE spot.id = :id;;
+        ');
         $stmt->bindValue(':id', $spotId);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {

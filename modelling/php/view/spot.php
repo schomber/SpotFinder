@@ -12,10 +12,16 @@ $this->spot;
 <div class="container spot-container">
     <form id="spot">
         <div class="form-row" style="margin-top: 0px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Spot Finder<input readonly id="finder" class="form-control" type="text" name="name" required="" placeholder="Awesome Spot XYZ" value="<?php echo TemplateView::noHTML(!empty($spot->getUsername()) ? $spot->getUsername() : ''); ?>"></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <label for="username">Spot Finder</label>
+                <input readonly id="username" class="form-control" type="text" name="username"  value="<?php echo TemplateView::noHTML($spot->getUsername()); ?>">
+            </div>
         </div>
         <div class="form-row" style="margin-top: 0px;">
-            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">Spot Name<input readonly id="name" class="form-control" type="text" name="name" required="" placeholder="Awesome Spot XYZ" value="<?php echo TemplateView::noHTML(!empty($spot->getName()) ? $spot->getName() : ''); ?>"></div>
+            <div class="col-sm-12 col-md-4 offset-sm-0 offset-md-4">
+                <label for="username">Spot Name</label>
+                <input readonly id="name" class="form-control" type="text" name="name" value="<?php echo TemplateView::noHTML($spot->getName()) ?>">
+            </div>
         </div>
         <div class="form-row fadeElement" style="margin-top: 20px;">
             <div class="col"><div id="addMap"></div></div>

@@ -10,16 +10,23 @@ namespace dao;
 
 use domain\Role;
 
-class RoleDAO
+class RoleDAO extends BasicDAO
 {
-    public function createAdminRole(Role $role) {
+    public function createAdminRole() {
         $stmt = $this->pdoInstance->prepare('
       INSERT INTO role (role)
         SELECT :role
     ');
-        $stmt->bindValue(':role', $role->getRole());
+        $stmt->bindValue(':role', "test");
         $stmt->execute();
-        return $this->read($this->pdoInstance->lastInsertId());
     }
+
+    public function listAll() {
+        $stmt = $this->pdoInstance->prepare('
+            SELECT * FROM role ORDER BY id;');
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, "domain\Role");
+    }
+
 
 }
