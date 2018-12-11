@@ -17,7 +17,7 @@ class RoleDAO extends BasicDAO
       INSERT INTO role (role)
         SELECT :role
     ');
-        $stmt->bindValue(':role', "test");
+        $stmt->bindValue(':role', "admin");
         $stmt->execute();
     }
 

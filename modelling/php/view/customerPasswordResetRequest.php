@@ -19,28 +19,21 @@
 <body>
 <div>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-        <div class="container"><a class="navbar-brand" href="index.php"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
+        <div class="container"><a class="navbar-brand" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
     </nav>
 </div>
+
 <div class="login-clean">
-    <form name="form" method="post">
-        <h2 class="sr-only">Login Form</h2>
-        <div class="illustration"><i class="icon ion-social-android-outline"></i></div>
-        <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-        <div style="text-align: center">
-            <a class="text-primary already" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/password/request">Opps, I forgot my password.</a>
+    <form name="form" action="<?php echo $GLOBALS["ROOT_URL"]; ?>/password/request" method="post">
+        <div class="illustration"><i class="icon ion-ios-rewind"></i></div>
+        <div class="form-group text-center">
+            <label for="email">Please type in your email address</label>
+            <input class="form-control" type="email" name="email" placeholder="Email">
         </div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="ValidateEmail(document.form.email)">Log In</button></div>
-        <div class="form-group">
-            <div class="checkbox">
-                <label class="control-label">
-                    <input type="checkbox" name="remember" /> Remember me for 30 days</label>
-            </div>
-        </div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="ValidateEmail(document.form.email)">Reset Password</button></div>
     </form>
 </div>
-<div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="register">Register</a></div>
+<div class="container text-center"><span class="text-center">brain started to work? </span><a href="<?php echo $GLOBALS["ROOT_URL"]; ?>/login"> go back to Login</a></div>
 
 <script src="assets/js/custom.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

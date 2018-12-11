@@ -67,22 +67,22 @@ class AuthServiceImpl implements AuthService
         return false;
     }
 
-    public function readCustomer()
+    public function readCustomer($id)
     {
         if($this->verifyAuth()) {
             $customerDAO = new CustomerDAO();
-            if(($this->getCurrentCustomerId() == $customerDAO->read($_GET['id'])->getId()) || $this->verfiyAdmin()){
-                return $customerDAO->read($_GET['id']);
+            if(($this->getCurrentCustomerId() == $customerDAO->read($id)->getId()) || $this->verfiyAdmin()){
+                return $customerDAO->read($id);
             }
             throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
         }
         throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
     }
 
-    public function editCustomer($username, $firstname,$surname, $email, $password)
+    public function editCustomer($id,$username, $firstname,$surname, $email, $password)
     {
         $customer = new Customer();
-        $customer->setId($_POST['id']);
+        $customer->setId($id);
         $customer->setUsername($username);
         $customer->setFirstname($firstname);
         $customer->setSurname($surname);
@@ -156,7 +156,7 @@ class AuthServiceImpl implements AuthService
     /**
      * AUTH TOKEN AREA
      */
-
+    //TODO check pw reset ... still not as should work
     public function validateToken($token) {
         $tokenArray = explode(":", $token);
         $authTokenDAO = new AuthDAO();
@@ -165,36 +165,39 @@ class AuthServiceImpl implements AuthService
             if(time()<=(new \DateTime($authToken->getExpiration()))->getTimestamp()) {
                 if(hash_equals(hash('sha384', hex2bin($tokenArray[1])), $authToken->getValidator())) {
                     $this->currentCustomerId = $authToken->getUserid();
+                    if($authToken->getAtype()===self::RESET_TOKEN){
+                        $authTokenDAO->delete($authToken);
+                    }
                     return true;
                 }
             }
             $authTokenDAO->delete($authToken);
         }
         return false;
-
-        /*
-        $tokenArray = explode(":", $token);
-        if(count($tokenArray)>1) {
-            $this->currentCustomerId = $tokenArray[0];
-            return true;
-        }
-        return false;
-        */
     }
 
     public function issueToken($type = self::CUST_TOKEN, $email = null){
         $token = new AuthToken();
         $token->setSelector(bin2hex(random_bytes(5)));
-        $token->setAtype(self::CUST_TOKEN);
-        $token->setUserid($this->currentCustomerId);
-        $timestamp = (new \DateTime('now'))->modify('+30 days');
+        if($type===self::CUST_TOKEN) {
+            $token->setAtype(self::CUST_TOKEN);
+            $token->setUserid($this->currentCustomerId);
+            $timestamp = (new \DateTime('now'))->modify('+30 days');
+        } elseif (isset($email)) {
+            $token->setAtype(self::RESET_TOKEN);
+            $token->setUserid((new CustomerDAO())->findByEmail($email)->getId());
+            $timestamp = (new \DateTime('now'))->modify('+1 hour');
+        } else {
+            throw new HTTPException(HTTPStatusCode::HTTP_406_NOT_ACCEPTABLE);
+        }
+
+
+
         $token->setExpiration($timestamp->format("Y-m-d H:1:s"));
         $validator = random_bytes(20);
         $token->setValidator(hash('sha384', $validator));
         $authTokenDAO = new AuthDAO();
         $authTokenDAO->create($token);
         return $token->getSelector() .":". bin2hex($validator);
-
-        //return $this->currentCustomerId . ":" . bin2hex(random_bytes(20));
     }
 }

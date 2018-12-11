@@ -29,7 +29,11 @@ use view\TemplateView;
                     <td><?php echo TemplateView::noHTML($customer->getUsername()); ?></td>
                     <td><?php echo TemplateView::noHTML($customer->getFirstname() ." ". $customer->getSurname()); ?></td>
                     <td><?php echo TemplateView::noHTML($customer->getEmail()) ?></td>
-                    <td><?php echo $customer->getRoleid(); ?></td>
+                    <td>
+                    <?php if (!is_null($customer->getRoleid())) {?>
+                        <div class="illustrationr admin-icon-centered"><i class="ion-checkmark-circled"></i></div>
+                    <?php } ?>
+                    </td>
                     <td>
                         <div class="btn-group" role="group">
                             <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">

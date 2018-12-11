@@ -18,7 +18,7 @@ class CustomerController
 {
     public static function edit(){
         $view = new TemplateView("editUser.php");
-        $view->customer = AuthServiceImpl::getInstance()->readCustomer();
+        $view->customer = AuthServiceImpl::getInstance()->readCustomer($_GET['id']);
         LayoutRendering::basicLayout($view);
     }
 
@@ -41,11 +41,11 @@ class CustomerController
     }
 
     public static function update(){
-        AuthServiceImpl::getInstance()->editCustomer($_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
+        AuthServiceImpl::getInstance()->editCustomer($_POST['id'],$_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
     }
 
     public static function register() {
-        AuthServiceImpl::getInstance()->editCustomer($_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
+        AuthServiceImpl::getInstance()->editCustomer($_POST['id'],$_POST["username"], $_POST["firstname"],$_POST["surname"],$_POST["email"], $_POST["password"]);
 
     }
 

@@ -44,8 +44,8 @@ class EmailServiceClient
             }
           ],
           "from": {
-            "email": "noreply@fhnw.ch",
-            "name": "WE-CRM"
+            "email": "noreply@spotfinder.ch",
+            "name": "SpotFinder"
           },
           "subject": "subject",
           "content": [

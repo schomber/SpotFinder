@@ -18,6 +18,23 @@ class Customer
     private $password;
     private $spot;
     private $roleid;
+    private $role;
+
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
 
     private $customer;
 

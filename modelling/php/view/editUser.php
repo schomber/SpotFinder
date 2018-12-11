@@ -13,8 +13,8 @@ isset($this->customer) ? $customer = $this->customer : $customer = new Customer(
 //$this->customer;
 ?>
 <div style="text-align: center; width: 100%;">
-    <?php if (AuthServiceImpl::getInstance()->verifyAdminExists()) {?>
-    <a class="adminButton btn" type="button" href="role/createAdmin?id=<?php echo $customer->getID() ?>" >Create Admin</a>
+    <?php if (AuthServiceImpl::getInstance()->verifyAdminExists() || (AuthServiceImpl::getInstance()->verfiyAdmin() && $this->customer->getRoleid()!==1) ) {?>
+    <a class="adminButton btn" type="button" href="role/createAdmin?id=<?php echo $customer->getID() ?>" >Elevate to Admin</a>
     <?php } ?>
 </div>
 <div class="login-clean">

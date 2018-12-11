@@ -18,9 +18,9 @@ interface AuthService{
 
     public function verfiyCustomer($email, $password);
 
-    public function readCustomer();
+    public function readCustomer($id);
 
-    public function editCustomer($username, $firstname, $surname, $email ,$password);
+    public function editCustomer($id,$username, $firstname, $surname, $email ,$password);
 
     public function validateToken($token);
 

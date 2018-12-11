@@ -17,6 +17,7 @@ use controller\PDFController;
 use controller\RoleController;
 use controller\AuthController;
 use services\AuthServiceImpl;
+use controller\CustomerPasswordResetController;
 
 session_start();
 
@@ -50,6 +51,25 @@ Router::route("POST", "/register", function () {
     CustomerController::register();
     Router::redirect("/");
 });
+
+Router::route("GET", "/password/request", function () {
+    CustomerPasswordResetController::requestView();
+});
+
+Router::route("POST", "/password/request", function () {
+    CustomerPasswordResetController::resetEmail();
+    Router::redirect("/login");
+});
+
+Router::route("POST", "/password/reset", function () {
+    CustomerPasswordResetController::reset();
+    Router::redirect("/login");
+});
+
+Router::route("GET", "/password/reset", function () {
+    CustomerPasswordResetController::resetView();
+});
+
 
 Router::route("GET", "/logout", function () {
     AuthController::logout();
@@ -103,7 +123,7 @@ Router::route_auth("GET", "/spot/delete", $authFunction, function (){
 
 Router::route_auth("GET", "/user/role/createAdmin", $authFunction, function (){
     RoleController::create();
-    Router::redirect("/");
+    Router::redirect("/spotList");
 });
 
 Router::route_auth("POST", "/spot/update", $authFunction, function (){

@@ -1,3 +1,4 @@
+<?php use view\TemplateView; ?>
 <!DOCTYPE html>
 <html>
 
@@ -19,28 +20,21 @@
 <body>
 <div>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-        <div class="container"><a class="navbar-brand" href="index.php"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
+        <div class="container"><a class="navbar-brand" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/"><i class="fa fa-map-o"></i>&nbsp;SpotFinder</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button></div>
     </nav>
 </div>
+
 <div class="login-clean">
-    <form name="form" method="post">
-        <h2 class="sr-only">Login Form</h2>
-        <div class="illustration"><i class="icon ion-social-android-outline"></i></div>
-        <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-        <div style="text-align: center">
-            <a class="text-primary already" href="<?php echo $GLOBALS["ROOT_URL"]; ?>/password/request">Opps, I forgot my password.</a>
-        </div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="ValidateEmail(document.form.email)">Log In</button></div>
+    <form name="form" action="<?php echo $GLOBALS["ROOT_URL"]; ?>/password/reset" method="post">
+        <div class="illustration"><i class="icon ion-ios-rewind"></i></div>
+        <input type="hidden" name="token" value="<?php echo TemplateView::noHTML($this->token);?>"/>
         <div class="form-group">
-            <div class="checkbox">
-                <label class="control-label">
-                    <input type="checkbox" name="remember" /> Remember me for 30 days</label>
-            </div>
+            <input class="form-control" type="password" name="password" placeholder="Password">
+            <p class="help-block"></p>
         </div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Reset</button></div>
     </form>
 </div>
-<div class="container text-center"><span class="text-center">Join us!&nbsp;</span><a href="register">Register</a></div>
 
 <script src="assets/js/custom.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
