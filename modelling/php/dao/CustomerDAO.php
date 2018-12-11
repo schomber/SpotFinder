@@ -46,8 +46,15 @@ class CustomerDAO extends BasicDAO
 
     public function update(Customer $customer)
     {
-        $stmt = $this->pdoInstance->prepare('
+
+        if(!empty($customer->getPassword())) {
+            $stmt = $this->pdoInstance->prepare('
+                UPDATE customer SET firstname=:firstname, surname=:surname, email=:email, password=:password WHERE id = :id;');
+            $stmt->bindValue(':password', $customer->getPassword());
+        } else {
+            $stmt = $this->pdoInstance->prepare('
                 UPDATE customer SET firstname=:firstname, surname=:surname, email=:email WHERE id = :id;');
+        }
         $stmt->bindValue(':id', $customer->getId());
         $stmt->bindValue(':firstname', $customer->getFirstname());
         $stmt->bindValue(':surname', $customer->getSurname());

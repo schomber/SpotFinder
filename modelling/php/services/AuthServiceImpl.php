@@ -79,16 +79,29 @@ class AuthServiceImpl implements AuthService
         throw new HTTPException(HTTPStatusCode::HTTP_401_UNAUTHORIZED);
     }
 
+    public static function verifyCustomerByMail($email)
+    {
+        $customerDAO = new CustomerDAO();
+        if(!is_null($customerDAO->findByEmail($email))) {
+            return true;
+        }
+        return false;
+    }
+
     public function editCustomer($id,$username, $firstname,$surname, $email, $password)
     {
+        $customerDAO = new CustomerDAO();
         $customer = new Customer();
         $customer->setId($id);
         $customer->setUsername($username);
         $customer->setFirstname($firstname);
         $customer->setSurname($surname);
         $customer->setEmail($email);
-        $customer->setPassword(password_hash($password, PASSWORD_DEFAULT));
-        $customerDAO = new CustomerDAO();
+        if(empty($password)) {
+            $customer->setPassword($password);
+        } else {
+            $customer->setPassword(password_hash($password, PASSWORD_DEFAULT));
+        }
         if($this->verifyAuth()) {
             if(($customerDAO->read($this->currentCustomerId)->getId() == $customer->getId()) || $this->verfiyAdmin()) {
                 $customerDAO->update($customer);
@@ -184,9 +197,9 @@ class AuthServiceImpl implements AuthService
             $token->setUserid($this->currentCustomerId);
             $timestamp = (new \DateTime('now'))->modify('+30 days');
         } elseif (isset($email)) {
-            $token->setAtype(self::RESET_TOKEN);
-            $token->setUserid((new CustomerDAO())->findByEmail($email)->getId());
-            $timestamp = (new \DateTime('now'))->modify('+1 hour');
+                $token->setAtype(self::RESET_TOKEN);
+                $token->setUserid((new CustomerDAO())->findByEmail($email)->getId());
+                $timestamp = (new \DateTime('now'))->modify('+1 hour');
         } else {
             throw new HTTPException(HTTPStatusCode::HTTP_406_NOT_ACCEPTABLE);
         }

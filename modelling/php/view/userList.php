@@ -6,6 +6,7 @@
  * Time: 22:13
  */
 use view\TemplateView;
+use services\AuthServiceImpl;
 ?>
 <div class="container spot-container"></div>
 <div class="container list-header"><h1 class="text-center">User Management</h1>
@@ -39,9 +40,11 @@ use view\TemplateView;
                             <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">
                                 <i class="fa fa-edit"></i>
                             </a>
+                            <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $customer->getId()) {?>
                             <a href="user/delete?id=<?php echo $customer->getID() ?>"class="btn btn-danger" type="button">
                                 <i class="fa fa-remove"></i>
                             </a>
+                            <?php } ?>
                         </div>
                     </td>
                 </tr>

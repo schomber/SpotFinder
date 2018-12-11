@@ -81,7 +81,7 @@ Router::route_auth("GET", "/userList", $authFunction, function (){
 });
 
 Router::route_auth("GET", "/user/delete", $authFunction, function (){
-    //CustomerController::delete();
+    CustomerController::delete();
     Router::redirect("/userList");
 });
 

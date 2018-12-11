@@ -22,18 +22,16 @@ class CustomerController
         LayoutRendering::basicLayout($view);
     }
 
-    //TODO implement amdin Priv so all users can be edited
     public static function delete(){
         $id = $_GET["id"];
         $customerDAO = new CustomerDAO();
         $customer = new Customer();
         $customer->setId($id);
-        if($_SESSION["userLogin"]["id"] != $id) {
+        if(AuthServiceImpl::getInstance()->verfiyAdmin() && !AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $id) {
             $customerDAO->delete($customer);
         }
     }
 
-    //TODO implement amdin Priv so all users can be edited
     public static function readAll(){
         $contentView = new TemplateView("userList.php");
         $contentView->customers = AuthServiceImpl::getInstance()->listAllUser();

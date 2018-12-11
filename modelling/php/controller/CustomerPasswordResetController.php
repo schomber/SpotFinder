@@ -42,9 +42,12 @@ class CustomerPasswordResetController
     }
 
     public static function resetEmail(){
-        $token = AuthServiceImpl::getInstance()->issueToken(AuthServiceImpl::RESET_TOKEN, $_POST["email"]);
-        $emailView = new TemplateView("customerPasswordResetEmail.php");
-        $emailView->resetLink = $GLOBALS["ROOT_URL"] . "/password/reset?token=" . $token;
-        return EmailServiceClient::sendEmail($_POST["email"], "Password Reset Email", $emailView->render());
+        if (AuthServiceImpl::verifyCustomerByMail( $_POST["email"])) {
+            $token = AuthServiceImpl::getInstance()->issueToken(AuthServiceImpl::RESET_TOKEN, $_POST["email"]);
+            $emailView = new TemplateView("customerPasswordResetEmail.php");
+            $emailView->resetLink = $GLOBALS["ROOT_URL"] . "/password/reset?token=" . $token;
+            return EmailServiceClient::sendEmail($_POST["email"], "Password Reset Email", $emailView->render());
+        }
+        return null;
     }
 }

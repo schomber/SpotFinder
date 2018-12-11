@@ -14,7 +14,12 @@ use services\AuthServiceImpl;
 <div class="container list-header spotLink" style="margin-top: 0;">
     <div class="row">
         <div class="col">
-            <div class="form-group text-center" style="width: 100%;"><label style="font-size: 20px;"><i class="fa fa-search" style="font-size: 20px;color: rgb(255,198,0);"></i>Search&nbsp;</label><input class="border rounded" type="search" name="s_search" style="filter: blur(0px) brightness(95%);padding-left: 10px;font-weight: bold;max-width: 250px;"></div>
+            <div class="form-group text-center" style="width: 100%;">
+                <form>
+                    <label style="font-size: 20px;"><i class="fa fa-search" style="font-size: 20px;color: rgb(255,198,0);"></i>Search&nbsp;</label>
+                    <input class="border rounded" type="search" name="s_search" style="filter: blur(0px) brightness(95%);padding-left: 10px;font-weight: bold;max-width: 250px;">
+                </form>
+            </div>
         </div>
     </div>
 
