@@ -15,7 +15,7 @@ class Spot
     private $lat;
     private $lng;
     private $name;
-    private $address;
+    public $address;
     private $category;
     private $scomment;
     private $userid;

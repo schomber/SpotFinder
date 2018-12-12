@@ -169,7 +169,6 @@ class AuthServiceImpl implements AuthService
     /**
      * AUTH TOKEN AREA
      */
-    //TODO check pw reset ... still not as should work
     public function validateToken($token) {
         $tokenArray = explode(":", $token);
         $authTokenDAO = new AuthDAO();

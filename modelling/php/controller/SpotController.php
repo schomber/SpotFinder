@@ -9,6 +9,7 @@
 namespace controller;
 
 use domain\Spot;
+use router\Router;
 use services\SpotServiceImpl;
 use view\LayoutRendering;
 use view\TemplateView;
@@ -63,6 +64,23 @@ class SpotController
         $contentView = new TemplateView("spotList.php");
         $contentView->spots = (new SpotServiceImpl())->listAllSpots();
         LayoutRendering::basicLayout($contentView);
+    }
+
+    public static function listSpotsBySearch(){
+        $contentView = new TemplateView("spotList.php");
+
+        if ($_POST['searchtext'] !== "") {
+            $contentView->spots = array_filter((new SpotServiceImpl())->listAllSpots(), function($spot){
+                $search = $_POST["searchtext"];
+                $spotAddress = $spot->address;
+                return (strpos(strtolower($spotAddress), strtolower($search)) !== false);
+
+            });
+            LayoutRendering::basicLayout($contentView);
+        } else {
+            Router::redirect("/");
+        }
+
     }
 
     public static function addSpotView(){

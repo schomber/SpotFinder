@@ -115,7 +115,6 @@ Router::route_auth("GET", "/spot/pdf", $authFunction, function (){
     PDFController::generatePDFSpot();
 });
 
-//TODO implement check if user is allowed to do this
 Router::route_auth("GET", "/spot/delete", $authFunction, function (){
     SpotController::delete();
     Router::redirect("/");
@@ -129,6 +128,10 @@ Router::route_auth("GET", "/user/role/createAdmin", $authFunction, function (){
 Router::route_auth("POST", "/spot/update", $authFunction, function (){
     SpotController::update();
     Router::redirect("/");
+});
+
+Router::route_auth("POST", "/spotList", $authFunction, function (){
+    SpotController::listSpotsBySearch();
 });
 
 try {

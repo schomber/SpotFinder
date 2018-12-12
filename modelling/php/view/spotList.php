@@ -15,9 +15,11 @@ use services\AuthServiceImpl;
     <div class="row">
         <div class="col">
             <div class="form-group text-center" style="width: 100%;">
-                <form>
-                    <label style="font-size: 20px;"><i class="fa fa-search" style="font-size: 20px;color: rgb(255,198,0);"></i>Search&nbsp;</label>
-                    <input class="border rounded" type="search" name="s_search" style="filter: blur(0px) brightness(95%);padding-left: 10px;font-weight: bold;max-width: 250px;">
+                <form action="spotList" method="post">
+                    <div class="form-row" style="margin-top: 20px;">
+                        <div class="col-sm-12 col-md-1 offset-md-4"><button class="btn btn-primary btn-block save" type="submit" >Search&nbsp;<i class="fa fa-search" style="font-size: 14px;color: rgb(255,198,0);"></i></button></div>
+                        <input class="border rounded" type="search" placeholder="Address" name="searchtext" style="filter: blur(0px) brightness(95%);padding-left: 10px;font-weight: bold;max-width: 250px;">
+                    </div>
                 </form>
             </div>
         </div>

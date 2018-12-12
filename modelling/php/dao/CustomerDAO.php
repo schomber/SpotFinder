@@ -63,7 +63,6 @@ class CustomerDAO extends BasicDAO
         return $this->read($customer->getId());
     }
 
-    //TODO poosible to implement Role as well -> for checking if user is elevated to do so
     public function delete(Customer $customer) {
         $stmt = $this->pdoInstance->prepare('
             DELETE FROM customer
@@ -102,5 +101,4 @@ class CustomerDAO extends BasicDAO
         return null;
     }
 
-    //TODO add if needed some additional search logic for customers
 }
