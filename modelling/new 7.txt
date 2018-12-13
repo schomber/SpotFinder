@@ -1,5 +1,0 @@
-TODO Liste Webseite
-
-ADDON (nur wenn no lust do isch ...)
-- Search to find Spots
-- only show 5 Spots per page -> load new if scroll
