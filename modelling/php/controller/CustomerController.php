@@ -27,7 +27,7 @@ class CustomerController
         $customerDAO = new CustomerDAO();
         $customer = new Customer();
         $customer->setId($id);
-        if(AuthServiceImpl::getInstance()->verfiyAdmin() && !AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $id) {
+        if(AuthServiceImpl::getInstance()->verfiyAdmin() && !AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $id && AuthServiceImpl::getInstance()->readCustomer($id)->getRoleid() !==1) {
             $customerDAO->delete($customer);
         }
     }

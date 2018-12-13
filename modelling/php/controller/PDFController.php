@@ -11,8 +11,6 @@ namespace controller;
 use services\SpotServiceImpl;
 use view\TemplateView;
 use services\PDFServiceClient;
-use view\LayoutRendering;
-
 class PDFController
 {
     public static function generatePDFSpot() {

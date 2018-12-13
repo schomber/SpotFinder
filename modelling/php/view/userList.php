@@ -40,7 +40,7 @@ use services\AuthServiceImpl;
                             <a href="user/edit?id=<?php echo $customer->getID() ?>" class="btn btn-secondary" type="button">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $customer->getId()) {?>
+                            <?php if (AuthServiceImpl::getInstance()->getCurrentCustomerId() !== $customer->getId() && $customer->getRoleid() !==1) {?>
                             <a href="user/delete?id=<?php echo $customer->getID() ?>"class="btn btn-danger" type="button">
                                 <i class="fa fa-remove"></i>
                             </a>

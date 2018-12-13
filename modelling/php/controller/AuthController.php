@@ -8,8 +8,7 @@
 
 namespace controller;
 
-use dao\CustomerDAO;
-use domain\Customer;
+
 use services\AuthServiceImpl;
 
 class AuthController
@@ -37,7 +36,6 @@ class AuthController
             if(isset($_POST["remember"])) {
                 setcookie("token", $token, (new \DateTime('now'))->modify('+30 days')->getTimestamp(), "/");
             }
-            //$_SESSION["userLogin"]["token"] = $authService->issueToken();
         }
     }
 

@@ -91,7 +91,7 @@ Router::route_auth("GET", "/user/edit", $authFunction, function (){
 
 Router::route_auth("POST", "/user/update", $authFunction, function (){
     CustomerController::update();
-    Router::redirect("/userList");
+    Router::redirect("/");
 });
 
 Router::route("POST", "/addSpot", function () {

@@ -72,7 +72,7 @@ class SpotDAO extends BasicDAO
 
     public function listAllSpots() {
         $stmt = $this->pdoInstance->prepare('
-        SELECT spot.id, lat, lng, name, address, category, userid, username FROM spot INNER JOIN customer ON customer.id = spot.userid ORDER BY id;
+        SELECT spot.id, lat, lng, name, address, category, userid, username FROM spot INNER JOIN customer ON customer.id = spot.userid ORDER BY id DESC;
         ');
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_CLASS, "domain\Spot");
