@@ -46,10 +46,6 @@ We first created a draft version with the help of bootstrap studio, which was la
 ![](design//register.jpg)
 ![](design//list_User.jpg)
 
-### Database / PostgreSQL
-The database is build with PostgreSQL
-The following images shows the structure of the DB
-![](design//SpotFinderERD.jpg)
 
 ### Domain Model -- Data Access Layer
 ![](design//SpotFindeDomainModelr.jpg)
@@ -57,6 +53,13 @@ The following images shows the structure of the DB
 ### DAO -- Data Access Layer
 ![](design//SpotFinderDAO.jpg)
 
+### Database / PostgreSQL
+The database is build with PostgreSQL
+The following image shows the structure of the DB
+![](design//SpotFinderERD.jpg)
+
+### Layering Structure
+![](design//SpotFinderPD.jpg)
 ### ---
 
 

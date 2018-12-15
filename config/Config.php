@@ -49,7 +49,7 @@ class Config
         if (isset($_ENV["HYPDF_PASSWORD"])) {
             self::$config["pdf.hypdf-password"] = $_ENV["HYPDF_PASSWORD"];
         }
-        if (isset($_ENV["SENDGRID_APIKEY"])) {
+            if (isset($_ENV["SENDGRID_APIKEY"])) {
             self::$config["email.sendgrid-apikey"] = $_ENV["SENDGRID_APIKEY"];
         }
     }
