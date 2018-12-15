@@ -6,7 +6,7 @@
 - [Design](#design)
     - [ProtoType Design](#prototype)
     - [Business Logic](#business-logic))
-    - [Data Access Layer](#data-access-dayer)
+    - [Data Access Layer](#data-access-layer)
     - [Database Layer](#database-layer)
 - [Overview](#overview)
     - [Architecture](#layering-structure)
