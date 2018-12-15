@@ -1,5 +1,5 @@
 # Spot Finder / Web-Engineering Project@FHNW
-
+# [====>[DEMO](https://peaceful-cliffs-72446.herokuapp.com)<====]
 - [Analysis](#analysis)
     - [Scenario](#scenario)
     - [Use Case](#use-case)
@@ -46,13 +46,81 @@ We first created a draft version with the help of bootstrap studio, which was la
 ![](design//register.jpg)
 ![](design//list_User.jpg)
 
-## Database / PostgreSQL
+### Database / PostgreSQL
+The database is build with PostgreSQL
+The following images shows the structure of the DB
 ![](design//SpotFinderERD.jpg)
 
+### Domain Model
+![](design//SpotFindeDomainModelr.jpg)
+
+### DAO
+
+### ---
+
+
+## Structure of Project
+├───config  /includes Autoloader   
+├───controller /Controller Classes   
+├───dao  /Data Object Classes  
+├───database  /Database Access Class  
+├───design  - markdown images and BootStrap Studio File  
+├───domain  /Domain Classes  
+├───http  /HTTP Exception, Header, Status Code and Status Header  
+├───router  / router class  
+├───services  / Application Logic -> Auth, Email, PDF, Role, SpotService  
+├───sql  / Export of DB Structure  
+└───view  /View Files  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───assets  /includes js, css and img assets  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├───css  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├───img  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───fav  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───js  
+
+## Libs and Vendors
+There are several external libaries used for this projects:  
+### Libraries
+- jQuery 3.3.1
+- BootStrap JS 4.3.1
+- FontAwesome 4.7.0
+- ionIcons
+- lineAwesome
+- BootStrap 4.1.3
+- Google Maps API (requires API KEY)
+### Vendors
+- [hypdf PDF Generator](https://hypdf.com/info/index)  
+- [SendGrid Email Service](https://sendgrid.com/)
+- [Google Maps API](https://cloud.google.com/maps-platform/?hl=de)
+
+#
+
+## Code Re-Use from WE-CRM Project 
+The structure of the project is based on the WE-CRM Framework by [@Andreas Martin](https://github.com/andreasmartin)  
+The follwing classes/interfaces are copied with medium- to minor changes
+- Autoloader.php
+- Config.php
+- AuthDAO.php
+- AuthToken.php
+- Database.php
+- HTTP- Exception, Header, StatusCode, StatusHeader.php
+- PDFServiceClient.php
+- AuthService.php
+- EmailServiceClient.php
+- Router (works like a charm :)
+- TemplateView.php
+- LayoutRendering.php
+
+You can find the Repo here -> [WE-CRM](https://github.com/webengfhnw/WE-CRM)
+Thanks for providing such detailed and well suited instructions for this project.
 ### Information Systems (Layering) Architecture
 
 ![](modelling/images/WE-CRM-Layering-Structure.png)
 
+## Installation:
+1. Clone Repo ```[SpotFinder](git@github.com:schomber/SpotFinder.git)```
+2. Import DB Query
+3. Log-in to SpotFinder (first User can elevate itself to Admin)
+4. Enjoy Life
 
 ## Tools used
 ##### Visual Paradigm 
