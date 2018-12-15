@@ -39,29 +39,27 @@ delete (only posts submitted by this user except he is an admin) or share(WhatsA
 - UC-13 [Reset Password by Mail]: As stated, registered users can reset the login password by mail (located on login screen)
 
 ## Design
-
 ### ProtoType 
 We first created a draft version with the help of bootstrap studio, which was later updated to the productive version.
+Check the demo for a complete experience of the User Interface
 #### User Management (basics)
 ![](design//register.jpg)
 ![](design//list_User.jpg)
 
-
-### Domain Model -- Data Access Layer
+## Data Access Layer
+### Domain Model
 ![](design//SpotFindeDomainModelr.jpg)
-
-### DAO -- Data Access Layer
+### DAO
 ![](design//SpotFinderDAO.jpg)
-
-### Database / PostgreSQL
+## Database Layer
+### Database
 The database is build with PostgreSQL
 The following image shows the structure of the DB
 ![](design//SpotFinderERD.jpg)
 
+##Overview
 ### Layering Structure
 ![](design//SpotFinderPD.jpg)
-### ---
-
 
 ## Structure of Project
 ├───config  /includes Autoloader   
@@ -96,7 +94,24 @@ There are several external libaries used for this projects:
 - [SendGrid Email Service](https://sendgrid.com/)
 - [Google Maps API](https://cloud.google.com/maps-platform/?hl=de)
 
-#
+##Environmental Vars (ENV)
+To run the project succesfully, ENV-Vars need to be set. Below a template:
+```
+[database]
+database.dsn="pgsql:host=<host>;port=<port>;dbname=<nameofDB>;sslmode=disable"
+database.user=""
+database.password=""
+   
+[google]
+google.apikey=""
+   
+[pdf]
+pdf.hypdf-user=""
+pdf.hypdf-password=""
+   
+[email]
+email.sendgrid-apikey=""
+```
 
 ## Code Re-Use from WE-CRM Project 
 The structure of the project is based on the WE-CRM Framework by [@Andreas Martin](https://github.com/andreasmartin)  
@@ -116,9 +131,7 @@ The follwing classes/interfaces are copied with medium- to minor changes
 
 You can find the Repo here -> [WE-CRM](https://github.com/webengfhnw/WE-CRM)
 Thanks for providing such detailed and well suited instructions for this project.
-### Information Systems (Layering) Architecture
 
-![](modelling/images/WE-CRM-Layering-Structure.png)
 
 ## Installation:
 1. Clone Repo ```[SpotFinder](git@github.com:schomber/SpotFinder.git)```
@@ -133,7 +146,7 @@ Thanks for providing such detailed and well suited instructions for this project
 ##### Git
 ##### PostgreSQL 11
 ##### XAMPP
-The project contains a .gitignore file to keep certain API Keys out of version control.
+The project contains a .gitignore file to keep certain Keys out of version control.
 ### Heroku Deployment
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 ## Maintainer
