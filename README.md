@@ -20,7 +20,6 @@ delete (only posts submitted by this user except he is an admin) or share(WhatsA
 
 
 ### Use Case
-
 ![](design/UseCaseDSF.png)
 
 - UC-1 [Login on Drone Spot Finder]: Users or Admins can log-in by entering an email address and password. As an extension, new user may register first.
@@ -45,11 +44,58 @@ Check the demo for a complete experience of the User Interface
 #### User Management (basics)
 ![](design//register.jpg)
 ![](design//list_User.jpg)
+## Business Logic
+The business logic is straight forward and similiar to the WE-CRM.  
+The RoleServiceImpl is special, as we do not wanted to implement a full Role Service where multiple Roles exist.
+Only one role should exist for the program (Admins). This role can be created by the first login of the first customer. This 
+Customer has the ability to initially elevate himself to an Admin (1st Admin of Application after Deployment).
 
+This  purpose of the function is to check initially (first ever user of application edits his profile)  
+![](design//elevate.jpg)  
+
+If a Role (id) exists
+```
+    public function checkAdminRoleCreated() {
+        $roleDAO = new RoleDAO();
+        if(count($roleDAO->listAll())<1){
+            return true;
+        }
+        return false;
+    }
+```
+if not -> DAO creates a new Role [id 1] with the name Admin
+```
+    public function createAdminRole() {
+        $stmt = $this->pdoInstance->prepare('
+      INSERT INTO role (role)
+        SELECT :role
+    ');
+        $stmt->bindValue(':role', "admin");
+        $stmt->execute();
+    }
+```
+Further, the user gets elevated by the AuthServiceImpl
+```
+    public function elevate($id){
+        if($this->verifyAuth()){
+            $customer = new Customer();
+            $customer->setId($id);
+            $customerDAO = new CustomerDAO();
+            if(((is_null($customerDAO->read($id)->getRoleid()) && $this->verifyAdminExists()) || $this->verfiyAdmin())) {
+                $customerDAO->elevate($customer);
+            }
+        }
+    }
+```
+![](design//admin.jpg)
+
+![](design//SpotFinderBSL.jpg)
 ## Data Access Layer
 ### Domain Model
+A php class representation of each DB table of the application (Class, Object).
 ![](design//SpotFindeDomainModelr.jpg)
 ### DAO
+We use Data Access Objects to access the Database Layer.
 ![](design//SpotFinderDAO.jpg)
 ## Database Layer
 ### Database
@@ -59,6 +105,7 @@ The following image shows the structure of the DB
 
 ##Overview
 ### Layering Structure
+Full representation of application architecture
 ![](design//SpotFinderPD.jpg)
 
 ## Structure of Project
