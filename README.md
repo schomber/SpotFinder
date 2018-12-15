@@ -14,6 +14,7 @@
     - [Libs and Vendors](#libs-and-vendors)
     - [Env Vars](#Env-Vars)
     - [Code Re-Use](#code-re-use)
+- [Application explained](#spotfinder)
 - [Installation](#installation)
 - [Tools used](#tools)
 - [Maintainer](#maintainer)
@@ -100,6 +101,36 @@ In a next step, the user must be elevated by the AuthServiceImpl
 if successful, a check mark on the user list shows up  
 
 ![](design//admin.jpg)
+
+#### Design Decisions:
+Users should never have the possibility to delete or edits spots from other users. 
+A user should not see the user list, as this could lead to problems.
+An Administrator should never have the possibility to delete him self or other Administrators.   
+  
+A search must be implemented. At some point to many spots will fill the page, and it gets hard to find the desired place to fly.
+For this purpose we included a search form into the spotList.
+
+The search is performed by the "listSpotsBySearch" function.
+It checks if the input is empty first. If not, we pull the list and store it locally to further filtered the array with array_filter().
+```
+    public static function listSpotsBySearch(){
+        $contentView = new TemplateView("spotList.php");
+
+        if ($_POST['searchtext'] !== "") {
+            $contentView->spots = array_filter((new SpotServiceImpl())->listAllSpots(), function($spot){
+                $search = $_POST["searchtext"];
+                $spotAddress = $spot->address;
+                return (strpos(strtolower($spotAddress), strtolower($search)) !== false);
+
+            });
+            LayoutRendering::basicLayout($contentView);
+        } else {
+            Router::redirect("/");
+        }
+
+    }
+```  
+
 
 ![](design//SpotFinderBSL.jpg)
 ### Data Access Layer
@@ -191,7 +222,37 @@ The follwing classes/interfaces are copied with medium- to minor changes
 You can find the Repo here -> [WE-CRM](https://github.com/webengfhnw/WE-CRM)
 Thanks for providing such detailed and well suited instructions for this project.
 
+##SpotFinder
+A brief explanation of how this app works.
+FPV or First Person View is an emerging hobby related to the field of drones.
+Take a look at Martins Instagram Profile to understand why this application could be handy.
+[2LCFPV@instagram](https://www.instagram.com/2lcfpv/)
+Lets compare it to Skateboarding. "Oh, look at this rail, I'd love to grind that". The same wow-effect appears in FPV. 
+People find spots to fly frequently, but there is no possibility to share places except by Google Maps and WhatsApp.
+This application helps pilots to store, find and share spots to fly all around the world.
 
+1. First you need to Login or if not yet registered a quick sign up is required(this prevents trolls from posting).
+2. After successful login, you get forwarded to the landing page (a list of stored spots appears)
+3. You are now able to search (by entering the address into to the search field)  
+or you can simply scroll through the existing spots. Just click on a spot if you would like to get further details.
+4. You can "add" a spot by clicking the "+ Spot" button in the navigation. Enter all the required information and submit it to the server.
+5. No worries, if you made a mistake, you can edit or delete your spot easily. 
+6. You are also able to change certain information about your profile. Just click on the "MyProfile" -> "Ediit" Button in the navigation.
+7. Share a spot on the list by clicking the WhatsApp button. 
+8. Extract the spot -> create a PDF with all information from the spot included.
+
+ Administrator do have some extra features.
+- Click on "myProfile" -> UserList to find all users signed up to this application.
+- You can edit evey user in the list. 
+- You can't delete yourself or other administrators
+- Administrators are marked with a check box.
+- You can elevate existing user to admins (simply edit the desired user profile and click the button "Elevate to Admin")
+- You are able to edit and delete all spots from the spot list (regular user can only edit they're own created spots)
+
+Additional Features:
+- Wrong password? no worry, you can simply reset your password. Go to the login page and press "Oops, I forgot my password".  
+You get prompted to enter your email. After submit, you will receive a email with further instrutions.
+- The application will remember your login for 30 days if you click "Remember me" at the login page.
 ## Installation:
 1. Clone Repo ```[SpotFinder](git@github.com:schomber/SpotFinder.git)```
 2. Import DB Query
