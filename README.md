@@ -51,10 +51,11 @@ The database is build with PostgreSQL
 The following images shows the structure of the DB
 ![](design//SpotFinderERD.jpg)
 
-### Domain Model
+### Domain Model -- Data Access Layer
 ![](design//SpotFindeDomainModelr.jpg)
 
-### DAO
+### DAO -- Data Access Layer
+![](design//SpotFinderDAO.jpg)
 
 ### ---
 
