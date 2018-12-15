@@ -103,7 +103,7 @@ if successful, a check mark on the user list shows up
 ![](design//admin.jpg)
 
 #### Design Decisions:
-Users should never have the possibility to delete or edits spots from other users. 
+Users should never have the possibility to delete or edit spots from other users. 
 A user should not see the user list, as this could lead to problems.
 An Administrator should never have the possibility to delete him self or other Administrators.   
   
@@ -111,7 +111,7 @@ A search must be implemented. At some point to many spots will fill the page, an
 For this purpose we included a search form into the spotList.
 
 The search is performed by the "listSpotsBySearch" function.
-It checks if the input is empty first. If not, we pull the list and store it locally to further filtered the array with array_filter().
+It checks if the input is empty first. If not, we pull the array of existing spots and store it locally to further filter the array with array_filter().
 ```
     public static function listSpotsBySearch(){
         $contentView = new TemplateView("spotList.php");
@@ -222,7 +222,7 @@ The follwing classes/interfaces are copied with medium- to minor changes
 You can find the Repo here -> [WE-CRM](https://github.com/webengfhnw/WE-CRM)
 Thanks for providing such detailed and well suited instructions for this project.
 
-##SpotFinder
+##SpotFinder  
 A brief explanation of how this app works.
 FPV or First Person View is an emerging hobby related to the field of drones.
 Take a look at Martins Instagram Profile to understand why this application could be handy.
