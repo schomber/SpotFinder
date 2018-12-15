@@ -103,10 +103,12 @@ if successful, a check mark on the user list shows up
 ![](design//admin.jpg)
 
 #### Design Decisions:
+
 Users should never have the possibility to delete or edit spots from other users. 
 A user should not see the user list, as this could lead to problems.
 An Administrator should never have the possibility to delete him self or other Administrators.   
-  
+
+##### Search Spot
 A search must be implemented. At some point to many spots will fill the page, and it gets hard to find the desired place to fly.
 For this purpose we included a search form into the spotList.
 
@@ -130,7 +132,48 @@ It checks if the input is empty first. If not, we pull the array of existing spo
 
     }
 ```  
+##### Google Maps - API
+When adding a spot to the database, multiple inputs are required.  
+The address / lat / lng inputs are automatically filed out as soon as the user clicks on the the map a certain location.  
+This limitation helps us to prevent further validation of the address and lat or lng values.
 
+```javascript
+    google.maps.event.addListener(map, 'click', function(event) {
+        marker.setPosition();
+        myLatlng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+        marker.setPosition(myLatlng);
+        cityCircle.setCenter(myLatlng);
+        toggleBounce();
+        geocodeLatLng(geocoder, map, myLatlng);
+        printLatLong(myLatlng);
+    });
+``` 
+On top, we added the feature of geolocation (user must accept that the app pulls location data from his device)
+This function automatically pulls the present location from the user and adds it to the map. Otherwise a default Location is set (Basel)
+```javascript
+    // HTML 5 Geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            myLatlng = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            marker.setPosition(myLatlng);
+            cityCircle.setCenter(myLatlng);
+            geocodeLatLng(geocoder, map, myLatlng);
+            printLatLong(myLatlng);
+
+            map.setCenter(myLatlng);
+        }, function() {
+            handleLocationError(true, infoWindow, myLatlng);
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+    }
+}
+``` 
 
 ![](design//SpotFinderBSL.jpg)
 ### Data Access Layer
