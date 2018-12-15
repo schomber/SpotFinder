@@ -5,7 +5,18 @@
     - [Use Case](#use-case)
 - [Design](#design)
     - [ProtoType Design](#prototype)
-    - [Information Systems (Layering) Architecture](#information-systems-layering-architecture)
+    - [Business Logic](#business-logic))
+    - [Data Access Layer](#data-access-dayer)
+    - [Database Layer](#database-layer)
+- [Overview](#overview)
+    - [Architecture](#layering-structure)
+    - [Structure of Work](#structure-of-project)
+    - [Libs and Vendors](#libs-and-vendors)
+    - [Env Vars](#env-vars)
+    - [Code Re-Use](#code-re-use)
+- [Installation](#installation)
+- [Tools used](#tools)
+- [Maintainer](#maintainer)
 - [License](#license)
 
 ## Analysis
@@ -40,20 +51,19 @@ delete (only posts submitted by this user except he is an admin) or share(WhatsA
 ## Design
 ### ProtoType 
 We first created a draft version with the help of bootstrap studio, which was later updated to the productive version.
-Check the demo for a complete experience of the User Interface
+Check the demo for a full experience of the User Interface
 #### User Management (basics)
 ![](design//register.jpg)
 ![](design//list_User.jpg)
-## Business Logic
+### Business Logic
 The business logic is straight forward and similiar to the WE-CRM.  
-The RoleServiceImpl is special, as we do not wanted to implement a full Role Service where multiple Roles exist.
-Only one role should exist for the program (Admins). This role can be created by the first login of the first customer. This 
+The RoleServiceImpl is special, as we didn't want to implement a full role service with multiple roles.
+Only one role is required for this simple 1st version of the program (Admins). This role can be created by the first login of the first customer. This 
 Customer has the ability to initially elevate himself to an Admin (1st Admin of Application after Deployment).
 
-This  purpose of the function is to check initially (first ever user of application edits his profile)  
+The  purpose of this function is to check initially if any role (id) exists (Use Case: First ever user of application edits his own profile)  
 ![](design//elevate.jpg)  
 
-If a Role (id) exists
 ```
     public function checkAdminRoleCreated() {
         $roleDAO = new RoleDAO();
@@ -74,7 +84,7 @@ if not -> DAO creates a new Role [id 1] with the name Admin
         $stmt->execute();
     }
 ```
-Further, the user gets elevated by the AuthServiceImpl
+In a next step, the user must be elevated by the AuthServiceImpl
 ```
     public function elevate($id){
         if($this->verifyAuth()){
@@ -87,18 +97,20 @@ Further, the user gets elevated by the AuthServiceImpl
         }
     }
 ```
+if successful, a check mark on the user list shows up  
+
 ![](design//admin.jpg)
 
 ![](design//SpotFinderBSL.jpg)
-## Data Access Layer
-### Domain Model
+### Data Access Layer
+#### Domain Model
 A php class representation of each DB table of the application (Class, Object).
 ![](design//SpotFindeDomainModelr.jpg)
-### DAO
+#### DAO
 We use Data Access Objects to access the Database Layer.
 ![](design//SpotFinderDAO.jpg)
-## Database Layer
-### Database
+### Database Layer
+#### Database
 The database is build with PostgreSQL
 The following image shows the structure of the DB
 ![](design//SpotFinderERD.jpg)
@@ -108,7 +120,7 @@ The following image shows the structure of the DB
 Full representation of application architecture
 ![](design//SpotFinderPD.jpg)
 
-## Structure of Project
+### Structure of Project
 ├───config  /includes Autoloader   
 ├───controller /Controller Classes   
 ├───dao  /Data Object Classes  
@@ -126,9 +138,9 @@ Full representation of application architecture
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───fav  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───js  
 
-## Libs and Vendors
+### Libs and Vendors
 There are several external libaries used for this projects:  
-### Libraries
+#### Libraries
 - jQuery 3.3.1
 - BootStrap JS 4.3.1
 - FontAwesome 4.7.0
@@ -136,12 +148,12 @@ There are several external libaries used for this projects:
 - lineAwesome
 - BootStrap 4.1.3
 - Google Maps API (requires API KEY)
-### Vendors
+#### Vendors
 - [hypdf PDF Generator](https://hypdf.com/info/index)  
 - [SendGrid Email Service](https://sendgrid.com/)
 - [Google Maps API](https://cloud.google.com/maps-platform/?hl=de)
 
-##Environmental Vars (ENV)
+###Env Vars
 To run the project succesfully, ENV-Vars need to be set. Below a template:
 ```
 [database]
@@ -160,7 +172,7 @@ pdf.hypdf-password=""
 email.sendgrid-apikey=""
 ```
 
-## Code Re-Use from WE-CRM Project 
+### Code Re-Use 
 The structure of the project is based on the WE-CRM Framework by [@Andreas Martin](https://github.com/andreasmartin)  
 The follwing classes/interfaces are copied with medium- to minor changes
 - Autoloader.php
@@ -183,10 +195,11 @@ Thanks for providing such detailed and well suited instructions for this project
 ## Installation:
 1. Clone Repo ```[SpotFinder](git@github.com:schomber/SpotFinder.git)```
 2. Import DB Query
-3. Log-in to SpotFinder (first User can elevate itself to Admin)
-4. Enjoy Life
+3. Copy & Paste ENV Config -> fill out
+4. Log-in to SpotFinder (first User can elevate itself to Admin)
+5. Enjoy Life
 
-## Tools used
+## Tools
 ##### Visual Paradigm 
 ##### Bootstrap Studio
 ##### PHPStorm
